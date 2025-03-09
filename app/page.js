@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionTemplate } from 'framer-motion';
-import { Sun, Moon, ChevronRight, Github, Twitter, Instagram, Facebook, Check, Globe, FileText, Layout, ArrowRight, Zap, BarChart3 } from 'lucide-react';
+import { Sun, Moon, ChevronRight, Github, Twitter, Instagram, Facebook, Check, Globe, FileText, Layout, ArrowRight, Zap, BarChart3, Code, Mail, Shield } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import * as THREE from 'three';
@@ -33,75 +33,71 @@ Chart.register(...registerables);
 const FEATURES = [
   {
     icon: <Zap className="w-6 h-6 text-indigo-500" />,
-    title: "Never Miss an Opportunity: Effortless Tracking",
-    description: "Manage all your job applications in one place with our intuitive dashboard and customizable views."
+    title: "Automatic Tracking with Userscripts",
+    description: "Browser extensions capture application data as you apply on any job site and store it in localStorage until sync."
   },
   {
     icon: <BarChart3 className="w-6 h-6 text-blue-500" />,
-    title: "Make Data-Driven Decisions: Insightful Analytics",
-    description: "Gain valuable insights into your job search with detailed analytics and progress tracking."
+    title: "Email Integration & Status Updates",
+    description: "Reads your emails to automatically track application statuses and interview requests using LLMs."
   },
   {
     icon: <Github className="w-6 h-6 text-purple-500" />,
-    title: "Showcase Your Work: Seamless GitHub Integration",
-    description: "Connect with GitHub to showcase your projects and enhance your applications."
+    title: "Interview Preparation Assistant",
+    description: "Automatically generates notes, practice questions, and resources based on the job description."
+  },
+  {
+    icon: <Layout className="w-6 h-6 text-emerald-500" />,
+    title: "Unified Dashboard Experience",
+    description: "Self-hosted solution that syncs data from userscripts to your personal database for complete privacy."
   }
 ];
 
-const TESTIMONIALS = [
-  {
-    image: "/user1.jpg",
-    quote: "jjugg kept me organized and helped me land my dream job in just 3 months!",
-    name: "John Doe",
-    title: "Software Engineer"
-  },
-  {
-    image: "/user2.jpg",
-    quote: "The analytics feature showed me where to focus my efforts—game changer!",
-    name: "Jane Smith",
-    title: "Product Manager"
-  },
-  {
-    image: "/user3.jpg",
-    quote: "GitHub integration made showcasing my portfolio effortless.",
-    name: "Alex Johnson",
-    title: "Web Developer"
-  }
-];
+// No testimonials needed
 
 const SCREENSHOTS = [
   {
     image: "/dashboard.jpg",
-    title: "jjugg Dashboard",
-    description: "Track all your applications at a glance"
+    title: "Unified Dashboard",
+    description: "All your applications synced from userscripts in one secure place"
   },
   {
     image: "/applications_grid.jpg",
-    title: "Application Tracking",
-    description: "Keep your job search well-organized"
+    title: "Browser Extension Capture",
+    description: "Data automatically captured as you apply on job sites"
   },
   {
     image: "/screenshot3.jpg",
-    title: "Analytics Overview",
-    description: "Visualize your job search progress"
+    title: "Email Status Tracking",
+    description: "AI-powered status updates from your inbox"
+  },
+  {
+    image: "/dashboard.jpg", // Placeholder - you may want to add a real image
+    title: "Interview Preparation",
+    description: "AI-generated notes and practice questions for each application"
   }
 ];
 
 const CONTRIBUTIONS = [
   {
     icon: <Globe className="w-6 h-6" />,
-    title: "Code Contributions",
-    description: "Contribute to the development of jjugg by submitting pull requests on GitHub."
+    title: "Userscript Development",
+    description: "Help expand our collection of job site-specific userscripts to capture application data."
   },
   {
     icon: <FileText className="w-6 h-6" />,
-    title: "Report Issues",
-    description: "Help improve jjugg by reporting bugs and issues you encounter."
+    title: "Email Parser Improvements",
+    description: "Enhance our email parsing models to better extract application statuses and interview details."
   },
   {
     icon: <Layout className="w-6 h-6" />,
-    title: "Suggest Features",
-    description: "Share your ideas for new features and enhancements to make jjugg even better."
+    title: "LLM Integration",
+    description: "Develop better prompts and AI integration for interview preparation and job search optimization."
+  },
+  {
+    icon: <Github className="w-6 h-6" />,
+    title: "Self-Hosting Enhancements",
+    description: "Contribute to making jjugg easier to deploy and configure on personal servers."
   }
 ];
 
@@ -345,16 +341,29 @@ export default function Home() {
     chartInstance.current = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+        labels: ['Applications', 'Responses', 'Interviews', 'Offers', 'Accepted'],
         datasets: [{
-          label: 'Applications',
-          data: [12, 19, 3, 5, 2],
+          label: 'Automatically Tracked',
+          data: [42, 28, 15, 5, 1],
           backgroundColor: [
-            'rgba(99, 102, 241, 0.7)', // Indigo
-            'rgba(59, 130, 246, 0.7)', // Blue
-            'rgba(168, 85, 247, 0.7)', // Purple
-            'rgba(236, 72, 153, 0.7)', // Pink
-            'rgba(79, 70, 229, 0.7)'   // Indigo darker
+            'rgba(99, 102, 241, 0.7)', // Indigo - Applications
+            'rgba(59, 130, 246, 0.7)', // Blue - Responses
+            'rgba(168, 85, 247, 0.7)', // Purple - Interviews
+            'rgba(236, 72, 153, 0.7)', // Pink - Offers
+            'rgba(16, 185, 129, 0.7)'  // Green - Accepted
+          ],
+          borderColor: theme === 'dark' ? '#333333' : '#dddddd',
+          borderWidth: 1
+        },
+        {
+          label: 'Without Automation',
+          data: [25, 12, 8, 3, 1],
+          backgroundColor: [
+            'rgba(99, 102, 241, 0.3)', // Indigo - Applications
+            'rgba(59, 130, 246, 0.3)', // Blue - Responses
+            'rgba(168, 85, 247, 0.3)', // Purple - Interviews
+            'rgba(236, 72, 153, 0.3)', // Pink - Offers
+            'rgba(16, 185, 129, 0.3)'  // Green - Accepted
           ],
           borderColor: theme === 'dark' ? '#333333' : '#dddddd',
           borderWidth: 1
@@ -513,7 +522,7 @@ export default function Home() {
             </span>
           </motion.a>
           <div className={`hidden md:flex space-x-8 font-mono text-sm`}>
-            {["features", "testimonials", "screenshots", "analytics-demo", "community-contributions", "cta"].map((item, index) => (
+            {["features", "installation", "screenshots", "analytics-demo", "community-contributions", "cta"].map((item, index) => (
               <motion.a 
                 key={item}
                 href={`#${item}`} 
@@ -525,6 +534,7 @@ export default function Home() {
               >
                 {item === "analytics-demo" ? "Analytics" : 
                  item === "community-contributions" ? "Community" : 
+                 item === "installation" ? "Install" :
                  item === "cta" ? "Get Started" : 
                  item.charAt(0).toUpperCase() + item.slice(1)}
               </motion.a>
@@ -563,12 +573,15 @@ export default function Home() {
             >
               <div className="px-4 py-4 space-y-4 font-mono text-sm">
                 <a href="#features" className="block py-2" onClick={() => setMobileMenuOpen(false)}>Features</a>
-                <a href="#testimonials" className="block py-2" onClick={() => setMobileMenuOpen(false)}>Testimonials</a>
+                <a href="#installation" className="block py-2" onClick={() => setMobileMenuOpen(false)}>Install</a>
                 <a href="#screenshots" className="block py-2" onClick={() => setMobileMenuOpen(false)}>Screenshots</a>
                 <a href="#analytics-demo" className="block py-2" onClick={() => setMobileMenuOpen(false)}>Analytics</a>
                 <a href="#community-contributions" className="block py-2" onClick={() => setMobileMenuOpen(false)}>Community</a>
                 <a href="#cta" className="block py-2" onClick={() => setMobileMenuOpen(false)}>Get Started</a>
-                <Button className="w-full font-mono rounded-full mt-4 bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500" onClick={() => setMobileMenuOpen(false)}>Get Started Free</Button>
+                <Button className="w-full font-mono rounded-full mt-4 bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500" onClick={() => setMobileMenuOpen(false)}>
+                  <Code className="w-4 h-4 mr-2" />
+                  npm install -g jjugg-cli
+                </Button>
               </div>
             </motion.div>
           )}
@@ -585,6 +598,42 @@ export default function Home() {
           className="absolute inset-0 w-full h-full"
           style={{ y, opacity }}
         />
+        
+        {/* Animated particles for browser extension, email, and code integration */}
+        <div className="absolute inset-0 pointer-events-none">
+          {[...Array(15)].map((_, i) => (
+            <motion.div
+              key={`particle-${i}`}
+              className="absolute"
+              initial={{ 
+                left: `${Math.random() * 100}%`, 
+                top: `${Math.random() * 100}%`,
+                opacity: 0,
+                scale: 0
+              }}
+              animate={{ 
+                left: [`${Math.random() * 100}%`, `${Math.random() * 100}%`, `${Math.random() * 100}%`],
+                top: [`${Math.random() * 100}%`, `${Math.random() * 100}%`, `${Math.random() * 100}%`],
+                opacity: [0, 0.7, 0],
+                scale: [0, 1, 0]
+              }}
+              transition={{
+                duration: 10 + Math.random() * 15,
+                repeat: Infinity,
+                delay: i * 1.5,
+                ease: "easeInOut"
+              }}
+            >
+              {i % 3 === 0 ? (
+                <Code className="text-indigo-500/40 h-6 w-6" />
+              ) : i % 3 === 1 ? (
+                <Mail className="text-blue-500/40 h-6 w-6" />
+              ) : (
+                <Shield className="text-purple-500/40 h-6 w-6" />
+              )}
+            </motion.div>
+          ))}
+        </div>
 
         <div className="max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-12 md:gap-16 items-center relative z-10">
           <div>
@@ -599,29 +648,116 @@ export default function Home() {
                   Job Search Reinvented
                 </span>
               </motion.div>
+              <motion.div 
+                className="mb-6 flex items-center"
+                variants={fadeIn}
+              >
+                <span className="bg-indigo-500/10 text-indigo-500 px-3 py-1 rounded-full text-sm font-mono mr-2">v1.2.0</span>
+                <span className={`text-xs ${theme === "dark" ? "text-slate-500" : "text-slate-500"}`}>
+                  <motion.span
+                    animate={{ opacity: [0, 1] }}
+                    transition={{ duration: 0.5, delay: 0.5 }}
+                  >
+                    npm downloads:
+                  </motion.span>{" "}
+                  <motion.span
+                    className="font-semibold"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.2, delay: 1 }}
+                  >
+                    4,721
+                  </motion.span>
+                </span>
+              </motion.div>
+              
               <motion.h1 
                 variants={fadeIn}
-                className="text-5xl md:text-6xl font-bold leading-tight"
+                className="text-5xl md:text-6xl font-bold leading-tight font-mono"
               >
-                Land Your Dream Job Faster with{" "}
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500">
-                  jjugg
+                <span className="block">
+                  <span className="text-indigo-500">#!/usr/bin/env</span> 
+                  <motion.span 
+                    className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 ml-2"
+                    animate={{ 
+                      backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                    }}
+                    transition={{ 
+                      duration: 5, 
+                      repeat: Infinity, 
+                      ease: "easeInOut" 
+                    }}
+                  >
+                    jjugg
+                  </motion.span>
                 </span>
+                <motion.span 
+                  className="block mt-2"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3, delay: 0.5 }}
+                >
+                  $ cat job_search | automate
+                </motion.span>
               </motion.h1>
-              <motion.p 
+              
+              <motion.div 
                 variants={fadeIn}
-                className={`text-xl max-w-lg ${theme === "dark" ? "text-slate-400" : "text-slate-600"}`}
+                className={`text-xl max-w-lg mt-6 ${theme === "dark" ? "text-slate-400" : "text-slate-600"} font-mono space-y-2 pl-4 border-l-2 border-indigo-500/30`}
               >
-                The all-in-one platform to organize, track, and analyze your job applications. Engineered for the modern job seeker.
-              </motion.p>
+                <motion.div 
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: 0.8 }}
+                  className="flex items-start"
+                >
+                  <span className="text-green-500 mr-2">→</span>
+                  <span>
+                    <span className="text-indigo-500 font-semibold">UserScript</span> captures job applications
+                  </span>
+                </motion.div>
+                
+                <motion.div 
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: 1.1 }}
+                  className="flex items-start"
+                >
+                  <span className="text-green-500 mr-2">→</span>
+                  <span>
+                    <span className="text-blue-500 font-semibold">Email parsers</span> track status changes
+                  </span>
+                </motion.div>
+                
+                <motion.div 
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: 1.4 }}
+                  className="flex items-start"
+                >
+                  <span className="text-green-500 mr-2">→</span>
+                  <span>
+                    <span className="text-purple-500 font-semibold">LLMs</span> prep you for interviews
+                  </span>
+                </motion.div>
+                
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: [0, 1, 0] }}
+                  transition={{ duration: 1, repeat: Infinity, repeatDelay: 0.5, delay: 1.7 }}
+                  className="text-indigo-500/70"
+                >
+                  _
+                </motion.div>
+              </motion.div>
               <motion.div 
                 variants={fadeIn}
                 className="flex flex-wrap gap-4"
               >
                 <Button asChild size="lg" className="font-mono rounded-full bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 hover:opacity-90 transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-1 group">
-                  <a href="#cta">
-                    Get Started Free
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  <a href="#installation">
+                    <span className="mr-2">$</span> npm install -g jjugg-cli
+                    <Code className="ml-2 h-4 w-4 transition-transform group-hover:rotate-12" />
                   </a>
                 </Button>
                 <Button asChild size="lg" variant="outline" className={`font-mono rounded-full ${theme === "dark" ? "hover:bg-slate-800" : "hover:bg-slate-100"} transition-all duration-300 hover:-translate-y-1`}>
@@ -661,6 +797,92 @@ export default function Home() {
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 50vw"
                   />
+                  
+                  {/* Animated data flow */}
+                  <div className="absolute inset-0 z-10 overflow-hidden pointer-events-none">
+                    {/* Browser extension icon */}
+                    <motion.div 
+                      className="absolute top-6 left-6 bg-white/10 backdrop-blur-md rounded-md p-2 border border-indigo-500/30 shadow-lg"
+                      animate={{ 
+                        scale: [1, 1.05, 1],
+                        borderColor: [
+                          'rgba(99, 102, 241, 0.3)',
+                          'rgba(99, 102, 241, 0.6)',
+                          'rgba(99, 102, 241, 0.3)'
+                        ]
+                      }}
+                      transition={{ 
+                        duration: 3,
+                        repeat: Infinity,
+                        repeatType: "reverse"
+                      }}
+                    >
+                      <Code className="h-5 w-5 text-indigo-500" />
+                    </motion.div>
+
+                    {/* Data packet animations */}
+                    {[...Array(5)].map((_, i) => (
+                      <motion.div
+                        key={`packet-${i}`}
+                        className="absolute h-2 w-2 rounded-full bg-indigo-500"
+                        initial={{ x: 40, y: 40, opacity: 0, scale: 0 }}
+                        animate={{ 
+                          x: [40, 100, 160, 220],
+                          y: [40, 90, 140, 200],
+                          opacity: [0, 1, 1, 0],
+                          scale: [0, 1, 1, 0]
+                        }}
+                        transition={{ 
+                          duration: 4,
+                          delay: i * 0.8,
+                          repeat: Infinity,
+                          repeatDelay: 1
+                        }}
+                      />
+                    ))}
+
+                    {/* Email integration icon */}
+                    <motion.div 
+                      className="absolute top-6 right-6 bg-white/10 backdrop-blur-md rounded-md p-2 border border-blue-500/30 shadow-lg"
+                      animate={{ 
+                        scale: [1, 1.05, 1],
+                        borderColor: [
+                          'rgba(59, 130, 246, 0.3)',
+                          'rgba(59, 130, 246, 0.6)',
+                          'rgba(59, 130, 246, 0.3)'
+                        ]
+                      }}
+                      transition={{ 
+                        duration: 3,
+                        repeat: Infinity,
+                        repeatType: "reverse",
+                        delay: 1
+                      }}
+                    >
+                      <Mail className="h-5 w-5 text-blue-500" />
+                    </motion.div>
+
+                    {/* Data packet animations from email */}
+                    {[...Array(5)].map((_, i) => (
+                      <motion.div
+                        key={`mail-${i}`}
+                        className="absolute h-2 w-2 rounded-full bg-blue-500"
+                        initial={{ x: 300, y: 40, opacity: 0, scale: 0 }}
+                        animate={{ 
+                          x: [300, 240, 180, 120],
+                          y: [40, 70, 100, 150],
+                          opacity: [0, 1, 1, 0],
+                          scale: [0, 1, 1, 0]
+                        }}
+                        transition={{ 
+                          duration: 4,
+                          delay: i * 0.8 + 2,
+                          repeat: Infinity,
+                          repeatDelay: 1
+                        }}
+                      />
+                    ))}
+                  </div>
                 </div>
               </motion.div>
             </div>
@@ -820,12 +1042,31 @@ export default function Home() {
                 variants={scaleUp}
               >
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 origin-left transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></div>
-                <div className={cn(
-                  "w-16 h-16 flex items-center justify-center mb-6 rounded-xl transition-transform duration-300 group-hover:scale-110",
-                  theme === "dark" ? "bg-slate-800" : "bg-slate-100"
-                )}>
-                  {feature.icon}
-                </div>
+                <motion.div 
+                  className={cn(
+                    "w-16 h-16 flex items-center justify-center mb-6 rounded-xl transition-transform duration-300 group-hover:scale-110",
+                    theme === "dark" ? "bg-slate-800" : "bg-slate-100"
+                  )}
+                  whileHover={{ rotate: [0, -10, 10, 0], transition: { duration: 0.5 } }}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <motion.div
+                    animate={{ 
+                      rotate: [0, 5, -5, 0],
+                      scale: [1, 1.1, 1]
+                    }}
+                    transition={{ 
+                      duration: 4,
+                      repeat: Infinity,
+                      repeatType: "reverse",
+                      delay: index * 0.5
+                    }}
+                  >
+                    {feature.icon}
+                  </motion.div>
+                </motion.div>
                 <h3 className="text-xl font-semibold mb-4 bg-clip-text">{feature.title}</h3>
                 <p className={theme === "dark" ? "text-slate-400" : "text-slate-600"}>{feature.description}</p>
               </motion.div>
@@ -834,11 +1075,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
+      {/* Installation Section - Replaces Testimonials */}
       <section className={cn(
         "py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden",
         theme === "dark" ? "bg-gradient-to-b from-slate-950 to-slate-900" : "bg-gradient-to-b from-white to-slate-50"
-      )} id="testimonials">
+      )} id="installation">
         <div className="max-w-7xl mx-auto relative z-10">
           <motion.div 
             className="text-center mb-16"
@@ -849,71 +1090,208 @@ export default function Home() {
           >
             <motion.div variants={fadeIn} className="flex justify-center mb-4">
               <span className="px-4 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-indigo-500/10 via-blue-500/10 to-purple-500/10 text-indigo-500 border border-indigo-500/20">
-                Success Stories
+                Get Started
               </span>
             </motion.div>
             <motion.h2 
               variants={fadeIn}
               className="text-4xl md:text-5xl font-bold mb-4"
             >
-              What Our Users{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500">
-                Say
-              </span>
+              Install{" "}
+              <motion.span 
+                className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500"
+                animate={{
+                  backgroundPosition: ['0% center', '100% center', '0% center'],
+                }}
+                transition={{
+                  duration: 8,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+              >
+                jjugg
+              </motion.span>
+              {" "}Today
             </motion.h2>
-            <motion.p 
-              variants={fadeIn}
-              className={`text-lg max-w-2xl mx-auto ${theme === "dark" ? "text-slate-400" : "text-slate-600"}`}
-            >
-              Hear from job seekers who transformed their search with jjugg.
-            </motion.p>
           </motion.div>
           
-          <div className="grid md:grid-cols-3 gap-8">
-            {TESTIMONIALS.map((testimonial, index) => (
-              <motion.div
-                key={index}
-                className={cn(
-                  "p-8 rounded-xl border shadow-md backdrop-blur-md relative z-10 overflow-hidden",
-                  "before:absolute before:inset-0 before:bg-gradient-to-b before:opacity-0 before:transition-all before:duration-300 before:hover:opacity-100 before:-z-10 hover:shadow-xl",
-                  theme === "dark" 
-                    ? "bg-slate-900/60 border-slate-800 hover:border-indigo-500/30 before:from-indigo-500/5 before:to-purple-500/5" 
-                    : "bg-white/60 border-slate-200 hover:border-indigo-500/30 before:from-indigo-500/5 before:to-purple-500/5"
-                )}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -5 }}
-              >
-                <div className="relative">
-                  <svg className="absolute -top-2 -left-2 w-10 h-10 text-indigo-500/30" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                  </svg>
+          {/* Terminal-style installation instructions */}
+          <div className="max-w-3xl mx-auto">
+            <motion.div
+              className={cn(
+                "p-6 rounded-xl backdrop-blur-md shadow-lg font-mono",
+                theme === "dark" ? "bg-slate-900/80 border border-slate-800" : "bg-white/80 border border-slate-200"
+              )}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <div className="flex items-center mb-4">
+                <div className="flex space-x-2">
+                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                  <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
                 </div>
-                <div className="w-20 h-20 rounded-full mx-auto mb-6 overflow-hidden border-2 border-indigo-500 ring-4 ring-indigo-500/20">
-                  <Image src={testimonial.image} alt={testimonial.name} width={80} height={80} />
+                <div className="text-xs text-slate-400 mx-auto">terminal</div>
+              </div>
+              
+              <div className="space-y-4">
+                {/* NPM Installation */}
+                <div className="space-y-2">
+                  <div className={`text-sm ${theme === "dark" ? "text-green-400" : "text-green-600"}`}>
+                    # For JavaScript lovers
+                  </div>
+                  <div className="flex items-start">
+                    <div className={`mr-2 ${theme === "dark" ? "text-purple-400" : "text-purple-600"}`}>$</div>
+                    <motion.div 
+                      className="flex-1"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.5, delay: 0.2 }}
+                    >
+                      <motion.span 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.1, delay: 0.3 }}
+                        className={theme === "dark" ? "text-slate-200" : "text-slate-800"}
+                      >
+                        npm install -g jjugg-cli
+                      </motion.span>
+                      <motion.span 
+                        animate={{ opacity: [0, 1, 0] }}
+                        transition={{ duration: 0.8, repeat: Infinity, repeatDelay: 0.5 }}
+                        className={theme === "dark" ? "text-slate-400" : "text-slate-600"}
+                      >
+                        |
+                      </motion.span>
+                    </motion.div>
+                  </div>
                 </div>
-                <p className={`text-lg italic mb-6 relative ${theme === "dark" ? "text-slate-300" : "text-slate-700"}`}>"{testimonial.quote}"</p>
-                <div>
-                  <p className="font-semibold text-lg">{testimonial.name}</p>
-                  <p className={theme === "dark" ? "text-slate-400" : "text-slate-500"}>{testimonial.title}</p>
+                
+                {/* Cargo Installation */}
+                <div className="space-y-2">
+                  <div className={`text-sm ${theme === "dark" ? "text-green-400" : "text-green-600"}`}>
+                    # For Rust enthusiasts
+                  </div>
+                  <div className="flex items-start">
+                    <div className={`mr-2 ${theme === "dark" ? "text-purple-400" : "text-purple-600"}`}>$</div>
+                    <motion.div 
+                      className="flex-1"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.5, delay: 0.8 }}
+                    >
+                      <motion.span 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.1, delay: 0.9 }}
+                        className={theme === "dark" ? "text-slate-200" : "text-slate-800"}
+                      >
+                        cargo install jjugg
+                      </motion.span>
+                      <motion.span 
+                        animate={{ opacity: [0, 1, 0] }}
+                        transition={{ duration: 0.8, repeat: Infinity, repeatDelay: 0.5 }}
+                        className={theme === "dark" ? "text-slate-400" : "text-slate-600"}
+                      >
+                        |
+                      </motion.span>
+                    </motion.div>
+                  </div>
                 </div>
-              </motion.div>
-            ))}
+                
+                {/* Starting the app */}
+                <div className="space-y-2">
+                  <div className={`text-sm ${theme === "dark" ? "text-green-400" : "text-green-600"}`}>
+                    # Launch the app
+                  </div>
+                  <div className="flex items-start">
+                    <div className={`mr-2 ${theme === "dark" ? "text-purple-400" : "text-purple-600"}`}>$</div>
+                    <motion.div 
+                      className="flex-1"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.5, delay: 1.4 }}
+                    >
+                      <motion.span 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.1, delay: 1.5 }}
+                        className={theme === "dark" ? "text-slate-200" : "text-slate-800"}
+                      >
+                        jjugg start
+                      </motion.span>
+                      <motion.span 
+                        animate={{ opacity: [0, 1, 0] }}
+                        transition={{ duration: 0.8, repeat: Infinity, repeatDelay: 0.5 }}
+                        className={theme === "dark" ? "text-slate-400" : "text-slate-600"}
+                      >
+                        |
+                      </motion.span>
+                    </motion.div>
+                  </div>
+                </div>
+                
+                {/* Launch output */}
+                <motion.div 
+                  className="py-2 px-3 rounded bg-black/20 text-sm overflow-x-auto"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  transition={{ duration: 0.5, delay: 2 }}
+                >
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 1, delay: 2.2 }}
+                  >
+                    <span className="text-indigo-400">➜</span> <span className="text-green-400">jjugg</span> v1.2.0<br />
+                    <span className="text-blue-400">info</span> Initializing browser extension hooks...<br />
+                    <span className="text-blue-400">info</span> Loading email parsers...<br />
+                    <span className="text-blue-400">info</span> Connecting to LLM service...<br />
+                    <span className="text-green-400">success</span> jjugg is running at <span className="text-yellow-300">http://localhost:3000</span>
+                  </motion.div>
+                </motion.div>
+              </div>
+            </motion.div>
+            
+            {/* Additional installation options */}
+            <motion.div 
+              className="text-center mt-8"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 2.5 }}
+            >
+              <p className={theme === "dark" ? "text-slate-400" : "text-slate-600"}>
+                <span className="font-semibold">Pro tip:</span> Check out our <a href="#" className="text-indigo-500 underline hover:text-indigo-600">Docker image</a> for an even faster setup!
+              </p>
+            </motion.div>
           </div>
         </div>
         
-        {/* Background decoration */}
-        <div className="absolute inset-0 -z-10 opacity-20">
-          <svg className="absolute top-0 left-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <pattern id="grid-pattern" width="40" height="40" patternUnits="userSpaceOnUse">
-                <path d="M 40 0 L 0 0 0 40" fill="none" stroke={theme === "dark" ? "#6366f1" : "#6366f1"} strokeWidth="0.5" opacity="0.2" />
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#grid-pattern)" />
-          </svg>
+        {/* Cool animated code background */}
+        <div className="absolute inset-0 -z-10 opacity-10 pointer-events-none overflow-hidden">
+          <motion.div
+            className="absolute inset-0 font-mono text-xs text-indigo-500/40"
+            initial={{ y: 0 }}
+            animate={{ y: "-100%" }}
+            transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
+          >
+            {Array.from({ length: 30 }).map((_, lineIndex) => (
+              <div key={lineIndex} className="whitespace-nowrap">
+                {Array.from({ length: 5 }).map((_, wordIndex) => {
+                  const functions = ["localStorage.setItem", "parseEmail", "trackApplication", "formatResponse", "renderDashboard", "syncData"];
+                  const objects = ["'application'", "'response'", "'interview'", "'email'", "'status'"];
+                  return (
+                    <span key={wordIndex} className="mr-4">
+                      {functions[Math.floor(Math.random() * functions.length)]}
+                      ({objects[Math.floor(Math.random() * objects.length)]})
+                    </span>
+                  );
+                })}
+              </div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
@@ -1057,12 +1435,34 @@ export default function Home() {
                 Progress
               </span>
             </motion.h2>
-            <motion.p 
+            <motion.div
               variants={fadeIn}
-              className={`text-lg max-w-2xl mx-auto ${theme === "dark" ? "text-slate-400" : "text-slate-600"}`}
+              className={`text-lg max-w-2xl mx-auto font-mono ${theme === "dark" ? "text-slate-400" : "text-slate-600"}`}
             >
-              Track your application status and performance with advanced analytics.
-            </motion.p>
+              <motion.span
+                initial={{ opacity: 1 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.1 }}
+              >
+                {">"} Track application metrics: 
+              </motion.span>
+              <motion.span
+                initial={{ width: 0, opacity: 0 }}
+                animate={{ width: "auto", opacity: 1 }}
+                transition={{ delay: 0.5, duration: 1.5 }}
+                className="overflow-hidden inline-block whitespace-nowrap ml-1"
+              >
+                <span className="text-indigo-500">collecting data</span> → <span className="text-blue-500">analyzing patterns</span> → <span className="text-purple-500">optimizing your search</span>
+              </motion.span>
+              <motion.span
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0, 1, 0] }}
+                transition={{ delay: 2, duration: 1, repeat: Infinity, repeatDelay: 0.5 }}
+                className="inline-block ml-1"
+              >
+                |
+              </motion.span>
+            </motion.div>
           </motion.div>
           
           <motion.div 
@@ -1241,16 +1641,27 @@ export default function Home() {
                 className="text-4xl md:text-5xl font-bold mb-4 text-center"
               >
                 Ready to{" "}
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500">
-                  Transform
-                </span>
+                <motion.span 
+                  className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 inline-block"
+                  animate={{ 
+                    scale: [1, 1.1, 1],
+                    rotate: [-1, 1, -1]
+                  }}
+                  transition={{ 
+                    duration: 2,
+                    repeat: Infinity,
+                    repeatType: "reverse" 
+                  }}
+                >
+                  Automate
+                </motion.span>
                 {" "}Your Job Search?
               </motion.h2>
               <motion.p 
                 variants={fadeIn}
                 className={`text-lg mb-8 max-w-xl mx-auto text-center ${theme === "dark" ? "text-slate-400" : "text-slate-600"}`}
               >
-                Join thousands of job seekers who landed their dream jobs with jjugg. Start organizing your job search today.
+                Join the open-source movement revolutionizing job applications. No more manual tracking—our userscripts capture data as you apply, email parsers monitor status changes, and AI prepares you for interviews.
               </motion.p>
               <motion.div variants={fadeIn} className="max-w-md mx-auto">
                 <motion.div 
