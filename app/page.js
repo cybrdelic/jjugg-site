@@ -2,12 +2,27 @@
 
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionTemplate } from 'framer-motion';
-import { Sun, Moon, ChevronRight, Github, Twitter, Instagram, Facebook, Check, Globe, FileText, Layout, ArrowRight, Zap, BarChart3, Code, Mail, Shield } from 'lucide-react';
+import { 
+  Sun, Moon, ChevronRight, Github, Twitter, Instagram, Facebook, 
+  Check, Globe, FileText, Layout, ArrowRight, Zap, BarChart3, 
+  Code, Mail, Shield, Terminal, BrowserIcon, Database, Server,
+  Sparkles, UserCircle2, Laptop, MonitorSmartphone, Package, Workflow as WorkflowIcon,
+  Cpu, Bot, Brain, Key, LockIcon
+} from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import * as THREE from 'three';
 import { Chart, registerables } from 'chart.js';
 import { cn } from "@/lib/utils";
+
+// Import custom UI components
+import { CodeBlock } from '@/app/components/ui/code-block';
+import { FeatureCard } from '@/app/components/ui/feature-card';
+import { SectionHeader } from '@/app/components/ui/section-header';
+import { Separator } from '@/app/components/ui/separator';
+import { Badge } from '@/app/components/ui/badge';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/app/components/ui/tabs';
+import { Workflow } from '@/app/components/ui/workflow';
 
 import {
   Card,
@@ -522,7 +537,7 @@ export default function Home() {
             </span>
           </motion.a>
           <div className={`hidden md:flex space-x-8 font-mono text-sm`}>
-            {["features", "installation", "screenshots", "analytics-demo", "community-contributions", "cta"].map((item, index) => (
+            {["how-it-works", "features", "installation", "screenshots", "analytics-demo", "community-contributions", "cta"].map((item, index) => (
               <motion.a 
                 key={item}
                 href={`#${item}`} 
@@ -532,7 +547,8 @@ export default function Home() {
                 className={`relative after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-0 hover:after:w-full after:transition-all after:duration-300
                 ${theme === "dark" ? "text-slate-400 hover:text-white after:bg-indigo-500" : "text-slate-600 hover:text-slate-900 after:bg-indigo-500"}`}
               >
-                {item === "analytics-demo" ? "Analytics" : 
+                {item === "how-it-works" ? "How It Works" :
+                 item === "analytics-demo" ? "Analytics" : 
                  item === "community-contributions" ? "Community" : 
                  item === "installation" ? "Install" :
                  item === "cta" ? "Get Started" : 
@@ -572,6 +588,7 @@ export default function Home() {
               className={`md:hidden ${theme === "dark" ? "bg-slate-950/95" : "bg-white/95"} backdrop-blur-md`}
             >
               <div className="px-4 py-4 space-y-4 font-mono text-sm">
+                <a href="#how-it-works" className="block py-2" onClick={() => setMobileMenuOpen(false)}>How It Works</a>
                 <a href="#features" className="block py-2" onClick={() => setMobileMenuOpen(false)}>Features</a>
                 <a href="#installation" className="block py-2" onClick={() => setMobileMenuOpen(false)}>Install</a>
                 <a href="#screenshots" className="block py-2" onClick={() => setMobileMenuOpen(false)}>Screenshots</a>
@@ -579,7 +596,7 @@ export default function Home() {
                 <a href="#community-contributions" className="block py-2" onClick={() => setMobileMenuOpen(false)}>Community</a>
                 <a href="#cta" className="block py-2" onClick={() => setMobileMenuOpen(false)}>Get Started</a>
                 <Button className="w-full font-mono rounded-full mt-4 bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500" onClick={() => setMobileMenuOpen(false)}>
-                  <Code className="w-4 h-4 mr-2" />
+                  <Terminal className="w-4 h-4 mr-2" />
                   npm install -g jjugg-cli
                 </Button>
               </div>
@@ -989,290 +1006,526 @@ export default function Home() {
         </motion.div>
       </section>
 
+      {/* How It Works Section */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8 relative" id="how-it-works">
+        <div className="max-w-7xl mx-auto">
+          <SectionHeader
+            badge="Automate Your Job Search"
+            title="How jjugg Works"
+            description="A seamless end-to-end solution that automates job tracking from application to interview."
+            theme={theme}
+          />
+          
+          <div className="grid lg:grid-cols-2 gap-12 mt-16">
+            {/* Left side: workflow visualization */}
+            <div>
+              <Workflow theme={theme} />
+            </div>
+            
+            {/* Right side: Features */}
+            <div className="space-y-6">
+              <div className="grid sm:grid-cols-2 gap-4">
+                <FeatureCard
+                  icon={<BrowserIcon className="w-6 h-6 text-indigo-500" />}
+                  title="Capture"
+                  description="Browser extensions detect and save job applications as you apply."
+                  badge="UserScripts"
+                  badgeVariant="secondary"
+                  theme={theme}
+                  index={0}
+                />
+                
+                <FeatureCard
+                  icon={<Database className="w-6 h-6 text-blue-500" />}
+                  title="Sync"
+                  description="Data from browser localStorage syncs to your local database."
+                  badge="Self-Hosted"
+                  badgeVariant="secondary"
+                  theme={theme}
+                  index={1}
+                />
+              </div>
+              
+              <div className="grid sm:grid-cols-2 gap-4">
+                <FeatureCard
+                  icon={<Mail className="w-6 h-6 text-purple-500" />}
+                  title="Track"
+                  description="Email parsers detect status changes and interview invites automatically."
+                  badge="AI-Powered"
+                  badgeVariant="secondary"
+                  theme={theme}
+                  index={2}
+                />
+                
+                <FeatureCard
+                  icon={<Sparkles className="w-6 h-6 text-green-500" />}
+                  title="Prepare"
+                  description="LLMs generate personalized interview questions and preparation notes."
+                  badge="GPT-4"
+                  badgeVariant="secondary"
+                  theme={theme}
+                  index={3}
+                />
+              </div>
+              
+              {/* Code example */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="mt-8"
+              >
+                <CodeBlock language="javascript" showLineNumbers={true} className="shadow-lg">
+{`// Example of userscript code for LinkedIn job application
+// @name     jjugg - LinkedIn Application Tracker
+// @version  1.0
+// @match    *://*.linkedin.com/jobs/*
+
+(function() {
+  // Detect when a job application is submitted
+  document.addEventListener('click', async (e) => {
+    if (e.target.textContent.includes('Submit application')) {
+      
+      // Extract job details
+      const jobData = {
+        title: document.querySelector('.job-title').textContent,
+        company: document.querySelector('.company-name').textContent,
+        location: document.querySelector('.job-location').textContent,
+        date: new Date().toISOString(),
+        source: 'linkedin',
+        status: 'applied'
+      };
+      
+      // Store in localStorage until sync
+      localStorage.setItem(
+        'jjugg_applications', 
+        JSON.stringify([
+          ...JSON.parse(localStorage.getItem('jjugg_applications') || '[]'),
+          jobData
+        ])
+      );
+      
+      console.log('jjugg captured application:', jobData);
+    }
+  });
+})();`}
+                </CodeBlock>
+              </motion.div>
+            </div>
+          </div>
+          
+          {/* Key benefits */}
+          <div className="mt-20">
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                {
+                  icon: <LockIcon className="w-5 h-5" />,
+                  title: "Privacy First",
+                  description: "Your data stays on your machine. No cloud storage, no third-party access.",
+                  color: "indigo"
+                },
+                {
+                  icon: <Terminal className="w-5 h-5" />,
+                  title: "Open Source",
+                  description: "Fully open-source codebase you can audit, modify and extend.",
+                  color: "blue"
+                },
+                {
+                  icon: <Cpu className="w-5 h-5" />,
+                  title: "Low Resource",
+                  description: "Minimal CPU and memory usage, even when tracking hundreds of applications.",
+                  color: "purple"
+                }
+              ].map((benefit, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className={cn(
+                    "p-6 rounded-xl border backdrop-blur-sm flex items-start gap-4",
+                    theme === "dark" 
+                      ? "bg-slate-900/40 border-slate-800" 
+                      : "bg-white/40 border-slate-200"
+                  )}
+                >
+                  <div className={cn(
+                    "rounded-lg p-2.5 mt-1",
+                    benefit.color === "indigo" && theme === "dark" ? "bg-indigo-500/10 text-indigo-400" : "",
+                    benefit.color === "blue" && theme === "dark" ? "bg-blue-500/10 text-blue-400" : "",
+                    benefit.color === "purple" && theme === "dark" ? "bg-purple-500/10 text-purple-400" : "",
+                    benefit.color === "indigo" && theme !== "dark" ? "bg-indigo-50 text-indigo-500" : "",
+                    benefit.color === "blue" && theme !== "dark" ? "bg-blue-50 text-blue-500" : "",
+                    benefit.color === "purple" && theme !== "dark" ? "bg-purple-50 text-purple-500" : ""
+                  )}>
+                    {benefit.icon}
+                  </div>
+                  <div>
+                    <h3 className={cn(
+                      "text-lg font-semibold mb-1",
+                      theme === "dark" ? "text-white" : "text-slate-900"
+                    )}>
+                      {benefit.title}
+                    </h3>
+                    <p className={theme === "dark" ? "text-slate-400" : "text-slate-600"}>
+                      {benefit.description}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+      
       {/* Features Section */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 relative" id="features">
         <div className="max-w-7xl mx-auto">
-          <motion.div 
-            className="text-center mb-16"
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-          >
-            <motion.div variants={fadeIn} className="flex justify-center mb-4">
-              <span className="px-4 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-indigo-500/10 via-blue-500/10 to-purple-500/10 text-indigo-500 border border-indigo-500/20">
-                Powerful Features
-              </span>
-            </motion.div>
-            <motion.h2 
-              variants={fadeIn}
-              className="text-4xl md:text-5xl font-bold mb-4"
-            >
-              Why Choose{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500">
-                jjugg
-              </span>
-              ?
-            </motion.h2>
-            <motion.p 
-              variants={fadeIn}
-              className={`text-lg max-w-2xl mx-auto ${theme === "dark" ? "text-slate-400" : "text-slate-600"}`}
-            >
-              Discover the powerful features that make jjugg the ultimate job application tracker.
-            </motion.p>
-          </motion.div>
+          <SectionHeader
+            badge="Core Features"
+            title="Everything You Need to Land Your Dream Job"
+            description="jjugg combines the best technologies to make your job search seamless and stress-free."
+            theme={theme}
+          />
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
             {FEATURES.map((feature, index) => (
-              <motion.div
+              <FeatureCard
                 key={index}
-                className={cn(
-                  "group p-8 rounded-xl border backdrop-blur-md transition-all duration-300 hover:shadow-xl relative overflow-hidden",
-                  "hover:shadow-indigo-500/10",
-                  "before:absolute before:inset-0 before:bg-gradient-to-b before:from-transparent before:to-transparent before:opacity-0 before:transition-all before:duration-300 before:group-hover:opacity-100 before:-z-10",
-                  theme === "dark" 
-                    ? "bg-slate-900/40 border-slate-800 before:from-indigo-500/5 before:to-purple-500/5 hover:border-indigo-500/40" 
-                    : "bg-white/40 border-slate-200 before:from-indigo-500/5 before:to-purple-500/5 hover:border-indigo-500/40"
-                )}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ y: -5 }}
-                variants={scaleUp}
-              >
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 origin-left transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></div>
-                <motion.div 
-                  className={cn(
-                    "w-16 h-16 flex items-center justify-center mb-6 rounded-xl transition-transform duration-300 group-hover:scale-110",
-                    theme === "dark" ? "bg-slate-800" : "bg-slate-100"
-                  )}
-                  whileHover={{ rotate: [0, -10, 10, 0], transition: { duration: 0.5 } }}
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                >
-                  <motion.div
-                    animate={{ 
-                      rotate: [0, 5, -5, 0],
-                      scale: [1, 1.1, 1]
-                    }}
-                    transition={{ 
-                      duration: 4,
-                      repeat: Infinity,
-                      repeatType: "reverse",
-                      delay: index * 0.5
-                    }}
-                  >
-                    {feature.icon}
-                  </motion.div>
-                </motion.div>
-                <h3 className="text-xl font-semibold mb-4 bg-clip-text">{feature.title}</h3>
-                <p className={theme === "dark" ? "text-slate-400" : "text-slate-600"}>{feature.description}</p>
-              </motion.div>
+                icon={feature.icon}
+                title={feature.title}
+                description={feature.description}
+                theme={theme}
+                index={index}
+              />
             ))}
           </div>
         </div>
       </section>
 
-      {/* Installation Section - Replaces Testimonials */}
+      {/* Installation Section */}
       <section className={cn(
         "py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden",
         theme === "dark" ? "bg-gradient-to-b from-slate-950 to-slate-900" : "bg-gradient-to-b from-white to-slate-50"
       )} id="installation">
         <div className="max-w-7xl mx-auto relative z-10">
-          <motion.div 
-            className="text-center mb-16"
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-          >
-            <motion.div variants={fadeIn} className="flex justify-center mb-4">
-              <span className="px-4 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-indigo-500/10 via-blue-500/10 to-purple-500/10 text-indigo-500 border border-indigo-500/20">
-                Get Started
-              </span>
-            </motion.div>
-            <motion.h2 
-              variants={fadeIn}
-              className="text-4xl md:text-5xl font-bold mb-4"
-            >
-              Install{" "}
-              <motion.span 
-                className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500"
-                animate={{
-                  backgroundPosition: ['0% center', '100% center', '0% center'],
-                }}
-                transition={{
-                  duration: 8,
-                  repeat: Infinity,
-                  ease: "linear"
-                }}
-              >
-                jjugg
-              </motion.span>
-              {" "}Today
-            </motion.h2>
-          </motion.div>
+          <SectionHeader
+            badge="Installation"
+            title="Get Started in Minutes"
+            description="Choose your preferred installation method and start automating your job search today."
+            theme={theme}
+          />
           
-          {/* Terminal-style installation instructions */}
-          <div className="max-w-3xl mx-auto">
+          {/* Installation Tabs */}
+          <div className="max-w-4xl mx-auto">
+            <Tabs defaultValue="npm" className="w-full">
+              <div className="flex justify-center mb-8">
+                <TabsList className={cn(
+                  "grid grid-cols-4 w-full max-w-xl",
+                  theme === "dark" 
+                    ? "bg-slate-800/80 text-slate-400" 
+                    : "bg-slate-100/80 text-slate-600"
+                )}>
+                  <TabsTrigger 
+                    value="npm" 
+                    className={cn(
+                      "data-[state=active]:bg-indigo-500 data-[state=active]:text-white font-mono flex items-center gap-1.5",
+                      theme === "dark" 
+                        ? "data-[state=active]:shadow-indigo-500/20 data-[state=active]:shadow-lg" 
+                        : "data-[state=active]:shadow-indigo-500/10"
+                    )}
+                  >
+                    <Package className="h-4 w-4" />
+                    npm
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="cargo" 
+                    className={cn(
+                      "data-[state=active]:bg-orange-500 data-[state=active]:text-white font-mono flex items-center gap-1.5",
+                      theme === "dark" 
+                        ? "data-[state=active]:shadow-orange-500/20 data-[state=active]:shadow-lg" 
+                        : "data-[state=active]:shadow-orange-500/10"
+                    )}
+                  >
+                    <Package className="h-4 w-4" />
+                    cargo
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="docker" 
+                    className={cn(
+                      "data-[state=active]:bg-blue-500 data-[state=active]:text-white font-mono flex items-center gap-1.5",
+                      theme === "dark" 
+                        ? "data-[state=active]:shadow-blue-500/20 data-[state=active]:shadow-lg" 
+                        : "data-[state=active]:shadow-blue-500/10"
+                    )}
+                  >
+                    <Package className="h-4 w-4" />
+                    docker
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="source" 
+                    className={cn(
+                      "data-[state=active]:bg-purple-500 data-[state=active]:text-white font-mono flex items-center gap-1.5",
+                      theme === "dark" 
+                        ? "data-[state=active]:shadow-purple-500/20 data-[state=active]:shadow-lg" 
+                        : "data-[state=active]:shadow-purple-500/10"
+                    )}
+                  >
+                    <Github className="h-4 w-4" />
+                    source
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+              
+              <div className="mt-8">
+                <TabsContent value="npm" className="space-y-4">
+                  <CodeBlock language="bash" className="shadow-lg">
+{`# Install jjugg CLI globally
+npm install -g jjugg-cli
+
+# Install browser extension
+npx jjugg install-extension
+
+# Launch application
+jjugg start
+
+# Open dashboard in your browser
+jjugg open`}
+                  </CodeBlock>
+                  
+                  <div className="p-4 rounded-lg bg-indigo-500/10 border border-indigo-500/30 mt-4">
+                    <h3 className="text-indigo-400 font-medium text-sm flex items-center mb-2">
+                      <Check className="w-4 h-4 mr-2" /> System Requirements
+                    </h3>
+                    <ul className="text-sm text-slate-400 space-y-1 ml-6 list-disc">
+                      <li>Node.js 16 or newer</li>
+                      <li>Chrome, Firefox, or Edge browser</li>
+                      <li>300MB free disk space</li>
+                    </ul>
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="cargo" className="space-y-4">
+                  <CodeBlock language="bash" className="shadow-lg">
+{`# Install jjugg from crates.io
+cargo install jjugg
+
+# Install browser extension
+jjugg install-extension
+
+# Launch application
+jjugg start
+
+# Open dashboard in your browser
+jjugg open`}
+                  </CodeBlock>
+                  
+                  <div className="p-4 rounded-lg bg-orange-500/10 border border-orange-500/30 mt-4">
+                    <h3 className="text-orange-400 font-medium text-sm flex items-center mb-2">
+                      <Check className="w-4 h-4 mr-2" /> System Requirements
+                    </h3>
+                    <ul className="text-sm text-slate-400 space-y-1 ml-6 list-disc">
+                      <li>Rust 1.65 or newer</li>
+                      <li>Chrome, Firefox, or Edge browser</li>
+                      <li>250MB free disk space</li>
+                      <li>Optional: SQLite development libraries</li>
+                    </ul>
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="docker" className="space-y-4">
+                  <CodeBlock language="bash" className="shadow-lg">
+{`# Pull the Docker image
+docker pull jjugg/jjugg-app:latest
+
+# Run the container
+docker run -d \\
+  --name jjugg \\
+  -p 3000:3000 \\
+  -v $(pwd)/jjugg-data:/app/data \\
+  jjugg/jjugg-app:latest
+
+# Access dashboard at http://localhost:3000
+
+# Install browser extension separately
+docker exec jjugg jjugg install-extension`}
+                  </CodeBlock>
+                  
+                  <div className="p-4 rounded-lg bg-blue-500/10 border border-blue-500/30 mt-4">
+                    <h3 className="text-blue-400 font-medium text-sm flex items-center mb-2">
+                      <Check className="w-4 h-4 mr-2" /> System Requirements
+                    </h3>
+                    <ul className="text-sm text-slate-400 space-y-1 ml-6 list-disc">
+                      <li>Docker Engine 20+ or Docker Desktop</li>
+                      <li>Chrome, Firefox, or Edge browser</li>
+                      <li>500MB free disk space for container</li>
+                    </ul>
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="source" className="space-y-4">
+                  <CodeBlock language="bash" className="shadow-lg">
+{`# Clone the repository
+git clone https://github.com/jjugg/jjugg.git
+
+# Navigate to project directory
+cd jjugg
+
+# Install dependencies
+npm install
+
+# Build from source
+npm run build
+
+# Launch application
+npm start
+
+# Install extension
+npm run extension:install`}
+                  </CodeBlock>
+                  
+                  <div className="p-4 rounded-lg bg-purple-500/10 border border-purple-500/30 mt-4">
+                    <h3 className="text-purple-400 font-medium text-sm flex items-center mb-2">
+                      <Check className="w-4 h-4 mr-2" /> System Requirements
+                    </h3>
+                    <ul className="text-sm text-slate-400 space-y-1 ml-6 list-disc">
+                      <li>Node.js 16+ or Rust 1.65+</li>
+                      <li>Git</li>
+                      <li>Build tools for your platform</li>
+                      <li>1GB free disk space for development</li>
+                    </ul>
+                  </div>
+                </TabsContent>
+              </div>
+            </Tabs>
+              
+            {/* Terminal output simulation */}
             <motion.div
               className={cn(
-                "p-6 rounded-xl backdrop-blur-md shadow-lg font-mono",
-                theme === "dark" ? "bg-slate-900/80 border border-slate-800" : "bg-white/80 border border-slate-200"
+                "mt-12 rounded-xl border backdrop-blur-md overflow-hidden",
+                theme === "dark" ? "bg-black/50 border-slate-800" : "bg-black/80 border-slate-700"
               )}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <div className="flex items-center mb-4">
+              <div className="flex items-center px-4 py-2 border-b border-slate-800">
                 <div className="flex space-x-2">
                   <div className="w-3 h-3 rounded-full bg-red-500"></div>
                   <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
                   <div className="w-3 h-3 rounded-full bg-green-500"></div>
                 </div>
-                <div className="text-xs text-slate-400 mx-auto">terminal</div>
+                <div className="text-xs text-slate-400 mx-auto font-mono">terminal</div>
               </div>
               
-              <div className="space-y-4">
-                {/* NPM Installation */}
-                <div className="space-y-2">
-                  <div className={`text-sm ${theme === "dark" ? "text-green-400" : "text-green-600"}`}>
-                    # For JavaScript lovers
-                  </div>
-                  <div className="flex items-start">
-                    <div className={`mr-2 ${theme === "dark" ? "text-purple-400" : "text-purple-600"}`}>$</div>
-                    <motion.div 
-                      className="flex-1"
+              <div className="p-4 max-h-64 overflow-y-auto font-mono text-sm text-slate-300">
+                <motion.div 
+                  className="space-y-1"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <div className="flex">
+                    <span className="text-green-400 mr-2">$</span>
+                    <motion.span
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.5, delay: 0.2 }}
                     >
-                      <motion.span 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.1, delay: 0.3 }}
-                        className={theme === "dark" ? "text-slate-200" : "text-slate-800"}
-                      >
-                        npm install -g jjugg-cli
-                      </motion.span>
-                      <motion.span 
-                        animate={{ opacity: [0, 1, 0] }}
-                        transition={{ duration: 0.8, repeat: Infinity, repeatDelay: 0.5 }}
-                        className={theme === "dark" ? "text-slate-400" : "text-slate-600"}
-                      >
-                        |
-                      </motion.span>
-                    </motion.div>
+                      npm install -g jjugg-cli
+                    </motion.span>
                   </div>
-                </div>
-                
-                {/* Cargo Installation */}
-                <div className="space-y-2">
-                  <div className={`text-sm ${theme === "dark" ? "text-green-400" : "text-green-600"}`}>
-                    # For Rust enthusiasts
-                  </div>
-                  <div className="flex items-start">
-                    <div className={`mr-2 ${theme === "dark" ? "text-purple-400" : "text-purple-600"}`}>$</div>
-                    <motion.div 
-                      className="flex-1"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.5, delay: 0.8 }}
-                    >
-                      <motion.span 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.1, delay: 0.9 }}
-                        className={theme === "dark" ? "text-slate-200" : "text-slate-800"}
-                      >
-                        cargo install jjugg
-                      </motion.span>
-                      <motion.span 
-                        animate={{ opacity: [0, 1, 0] }}
-                        transition={{ duration: 0.8, repeat: Infinity, repeatDelay: 0.5 }}
-                        className={theme === "dark" ? "text-slate-400" : "text-slate-600"}
-                      >
-                        |
-                      </motion.span>
-                    </motion.div>
-                  </div>
-                </div>
-                
-                {/* Starting the app */}
-                <div className="space-y-2">
-                  <div className={`text-sm ${theme === "dark" ? "text-green-400" : "text-green-600"}`}>
-                    # Launch the app
-                  </div>
-                  <div className="flex items-start">
-                    <div className={`mr-2 ${theme === "dark" ? "text-purple-400" : "text-purple-600"}`}>$</div>
-                    <motion.div 
-                      className="flex-1"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.5, delay: 1.4 }}
-                    >
-                      <motion.span 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.1, delay: 1.5 }}
-                        className={theme === "dark" ? "text-slate-200" : "text-slate-800"}
-                      >
-                        jjugg start
-                      </motion.span>
-                      <motion.span 
-                        animate={{ opacity: [0, 1, 0] }}
-                        transition={{ duration: 0.8, repeat: Infinity, repeatDelay: 0.5 }}
-                        className={theme === "dark" ? "text-slate-400" : "text-slate-600"}
-                      >
-                        |
-                      </motion.span>
-                    </motion.div>
-                  </div>
-                </div>
-                
-                {/* Launch output */}
-                <motion.div 
-                  className="py-2 px-3 rounded bg-black/20 text-sm overflow-x-auto"
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  transition={{ duration: 0.5, delay: 2 }}
-                >
-                  <motion.div
+                  
+                  <motion.div 
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ duration: 1, delay: 2.2 }}
+                    transition={{ duration: 0.5, delay: 0.7 }}
                   >
-                    <span className="text-indigo-400">➜</span> <span className="text-green-400">jjugg</span> v1.2.0<br />
-                    <span className="text-blue-400">info</span> Initializing browser extension hooks...<br />
-                    <span className="text-blue-400">info</span> Loading email parsers...<br />
-                    <span className="text-blue-400">info</span> Connecting to LLM service...<br />
-                    <span className="text-green-400">success</span> jjugg is running at <span className="text-yellow-300">http://localhost:3000</span>
+                    <span className="text-blue-400">added</span> 247 packages in 3.2s
                   </motion.div>
+                  
+                  <div className="flex mt-2">
+                    <span className="text-green-400 mr-2">$</span>
+                    <motion.span
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.5, delay: 1.2 }}
+                    >
+                      jjugg start
+                    </motion.span>
+                  </div>
+                  
+                  <motion.div
+                    className="space-y-1 mt-1"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.8, delay: 1.7 }}
+                  >
+                    <div><span className="text-indigo-400">➜</span> <span className="text-green-400">jjugg</span> v1.2.0</div>
+                    <div><span className="text-blue-400">info</span> Loading configuration from /home/user/.config/jjugg/config.json</div>
+                    <div><span className="text-blue-400">info</span> Initializing browser extension hooks...</div>
+                    <div><span className="text-blue-400">info</span> Found 12 existing job applications in localStorage</div>
+                    <div><span className="text-blue-400">info</span> Synchronizing with local database...</div>
+                    <div><span className="text-blue-400">info</span> Loading email parsers for 5 providers...</div>
+                    <div><span className="text-blue-400">info</span> Connecting to LLM service...</div>
+                    <div><span className="text-blue-400">info</span> Starting web server on port 3000...</div>
+                    <div><span className="text-green-400">success</span> jjugg is running at <span className="text-yellow-300">http://localhost:3000</span></div>
+                  </motion.div>
+                  
+                  <div className="flex mt-2">
+                    <motion.span
+                      className="text-slate-300"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3, delay: 2.6 }}
+                    >
+                      <span className="text-green-400 mr-2">$</span>
+                    </motion.span>
+                    <motion.span
+                      animate={{ opacity: [0, 1, 0] }}
+                      transition={{ duration: 0.8, repeat: Infinity, repeatDelay: 0.5, delay: 2.7 }}
+                      className="text-slate-300"
+                    >
+                      |
+                    </motion.span>
+                  </div>
                 </motion.div>
               </div>
             </motion.div>
             
-            {/* Additional installation options */}
+            {/* Documentation link */}
             <motion.div 
-              className="text-center mt-8"
-              initial={{ opacity: 0, y: 20 }}
+              className="flex justify-center items-center mt-8 mb-4"
+              initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 2.5 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
             >
-              <p className={theme === "dark" ? "text-slate-400" : "text-slate-600"}>
-                <span className="font-semibold">Pro tip:</span> Check out our <a href="#" className="text-indigo-500 underline hover:text-indigo-600">Docker image</a> for an even faster setup!
-              </p>
+              <a 
+                href="#" 
+                className={cn(
+                  "flex items-center px-5 py-2 rounded-full font-medium text-sm transition-all",
+                  theme === "dark" 
+                    ? "text-indigo-400 hover:text-white bg-indigo-500/10 hover:bg-indigo-500/20" 
+                    : "text-indigo-700 hover:text-indigo-900 bg-indigo-100 hover:bg-indigo-200"
+                )}
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                View full documentation
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </a>
             </motion.div>
           </div>
         </div>
         
         {/* Cool animated code background */}
-        <div className="absolute inset-0 -z-10 opacity-10 pointer-events-none overflow-hidden">
+        <div className="absolute inset-0 -z-10 opacity-5 pointer-events-none overflow-hidden">
           <motion.div
-            className="absolute inset-0 font-mono text-xs text-indigo-500/40"
+            className="absolute inset-0 font-mono text-xs text-indigo-500/90"
             initial={{ y: 0 }}
             animate={{ y: "-100%" }}
             transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
