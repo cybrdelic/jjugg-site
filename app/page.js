@@ -69,8 +69,6 @@ const FEATURES = [
   }
 ];
 
-// No testimonials needed
-
 const SCREENSHOTS = [
   {
     image: "/dashboard.jpg",
@@ -151,6 +149,18 @@ export default function Home() {
 
   useEffect(() => {
     setMounted(true);
+
+    // Import fonts in the client component
+    const loadFonts = async () => {
+      if (typeof window !== 'undefined') {
+        await Promise.all([
+          document.fonts.load('1em "Inter"'),
+          document.fonts.load('1em "Outfit"')
+        ]);
+      }
+    };
+
+    loadFonts();
   }, []);
 
   // Mouse position tracking
@@ -391,7 +401,10 @@ export default function Home() {
           y: {
             beginAtZero: true,
             ticks: {
-              color: theme === 'dark' ? '#cccccc' : '#333333'
+              color: theme === 'dark' ? '#cccccc' : '#333333',
+              font: {
+                family: "'Inter', sans-serif" // Apply Inter font to chart labels
+              }
             },
             grid: {
               color: theme === 'dark' ? '#333333' : '#eeeeee'
@@ -399,7 +412,10 @@ export default function Home() {
           },
           x: {
             ticks: {
-              color: theme === 'dark' ? '#cccccc' : '#333333'
+              color: theme === 'dark' ? '#cccccc' : '#333333',
+              font: {
+                family: "'Inter', sans-serif" // Apply Inter font to chart labels
+              }
             },
             grid: {
               color: theme === 'dark' ? '#333333' : '#eeeeee'
@@ -409,7 +425,21 @@ export default function Home() {
         plugins: {
           legend: {
             labels: {
-              color: theme === 'dark' ? '#ffffff' : '#000000'
+              color: theme === 'dark' ? '#ffffff' : '#000000',
+              font: {
+                family: "'Inter', sans-serif" // Apply Inter font to chart legend
+              }
+            }
+          },
+          tooltip: {
+            titleFont: {
+              family: "'Inter', sans-serif"
+            },
+            bodyFont: {
+              family: "'Inter', sans-serif"
+            },
+            footerFont: {
+              family: "'Inter', sans-serif"
             }
           }
         }
@@ -498,7 +528,7 @@ export default function Home() {
 
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${theme === "dark" ? "bg-slate-950 text-white" : "bg-white text-slate-900"}`}>
+    <div className={`min-h-screen transition-colors duration-300 font-inter ${theme === "dark" ? "bg-slate-950 text-white" : "bg-white text-slate-900"}`}>
       {/* Shader Background Canvas */}
       <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full -z-10"></canvas>
 
@@ -514,7 +544,7 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.5 }}
         onClick={toggleTheme}
-        className={`fixed top-5 right-5 z-50 flex items-center gap-2 px-3 py-2 text-sm rounded-full font-mono border shadow-lg backdrop-blur-md
+        className={`fixed top-5 right-5 z-50 flex items-center gap-2 px-3 py-2 text-sm rounded-full font-inter border shadow-lg backdrop-blur-md
         ${theme === "dark" ? "border-slate-800 bg-slate-900/60" : "border-slate-200 bg-white/60"} transition-all hover:scale-105 focus:outline-primary focus:outline-offset-2 focus:outline-2`}
       >
         {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
@@ -527,7 +557,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
           <motion.a
             href="#"
-            className="text-3xl font-bold font-mono"
+            className="text-3xl font-bold font-outfit tracking-tight"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
@@ -537,7 +567,7 @@ export default function Home() {
               jjugg
             </span>
           </motion.a>
-          <div className={`hidden md:flex space-x-8 font-mono text-sm`}>
+          <div className={`hidden md:flex space-x-8 font-inter text-sm`}>
             {["how-it-works", "features", "installation", "screenshots", "analytics-demo", "community-contributions", "cta"].map((item, index) => (
               <motion.a
                 key={item}
@@ -562,7 +592,7 @@ export default function Home() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.8 }}
           >
-            <Button className="hidden md:flex font-mono rounded-full bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 hover:opacity-90 transition-all duration-300 shadow-md hover:shadow-xl hover:translate-y-[-2px]">
+            <Button className="hidden md:flex font-inter rounded-full bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 hover:opacity-90 transition-all duration-300 shadow-md hover:shadow-xl hover:translate-y-[-2px]">
               Get Started
             </Button>
           </motion.div>
@@ -588,7 +618,7 @@ export default function Home() {
               exit={{ opacity: 0, height: 0 }}
               className={`md:hidden ${theme === "dark" ? "bg-slate-950/95" : "bg-white/95"} backdrop-blur-md`}
             >
-              <div className="px-4 py-4 space-y-4 font-mono text-sm">
+              <div className="px-4 py-4 space-y-4 font-inter text-sm">
                 <a href="#how-it-works" className="block py-2" onClick={() => setMobileMenuOpen(false)}>How It Works</a>
                 <a href="#features" className="block py-2" onClick={() => setMobileMenuOpen(false)}>Features</a>
                 <a href="#installation" className="block py-2" onClick={() => setMobileMenuOpen(false)}>Install</a>
@@ -596,7 +626,7 @@ export default function Home() {
                 <a href="#analytics-demo" className="block py-2" onClick={() => setMobileMenuOpen(false)}>Analytics</a>
                 <a href="#community-contributions" className="block py-2" onClick={() => setMobileMenuOpen(false)}>Community</a>
                 <a href="#cta" className="block py-2" onClick={() => setMobileMenuOpen(false)}>Get Started</a>
-                <Button className="w-full font-mono rounded-full mt-4 bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500" onClick={() => setMobileMenuOpen(false)}>
+                <Button className="w-full font-inter rounded-full mt-4 bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500" onClick={() => setMobileMenuOpen(false)}>
                   <Terminal className="w-4 h-4 mr-2" />
                   npm install -g jjugg-cli
                 </Button>
@@ -606,289 +636,95 @@ export default function Home() {
         </AnimatePresence>
       </nav>
 
-      {/* Hero Section */}
       <section
         ref={heroRef}
-        className="min-h-screen flex items-center px-4 sm:px-6 lg:px-8 pt-16 relative overflow-hidden"
         id="hero"
+        className="min-h-screen flex items-center px-4 sm:px-6 lg:px-8 pt-16 relative overflow-hidden"
       >
         <motion.div
-          className="absolute inset-0 w-full h-full"
-          style={{ y, opacity }}
-        />
-
-        {/* Animated particles for browser extension, email, and code integration */}
-        <div className="absolute inset-0 pointer-events-none">
-          {[...Array(15)].map((_, i) => (
-            <motion.div
-              key={`particle-${i}`}
-              className="absolute"
-              initial={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                opacity: 0,
-                scale: 0
-              }}
-              animate={{
-                left: [`${Math.random() * 100}%`, `${Math.random() * 100}%`, `${Math.random() * 100}%`],
-                top: [`${Math.random() * 100}%`, `${Math.random() * 100}%`, `${Math.random() * 100}%`],
-                opacity: [0, 0.7, 0],
-                scale: [0, 1, 0]
-              }}
-              transition={{
-                duration: 10 + Math.random() * 15,
-                repeat: Infinity,
-                delay: i * 1.5,
-                ease: "easeInOut"
-              }}
-            >
-              {i % 3 === 0 ? (
-                <Code className="text-indigo-500/40 h-6 w-6" />
-              ) : i % 3 === 1 ? (
-                <Mail className="text-blue-500/40 h-6 w-6" />
-              ) : (
-                <Shield className="text-purple-500/40 h-6 w-6" />
-              )}
-            </motion.div>
-          ))}
-        </div>
-
-        <div className="max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-12 md:gap-16 items-center relative z-10">
+          className="max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-12 md:gap-16 items-center relative z-10"
+          variants={staggerContainer}
+          initial="hidden"
+          animate="show"
+        >
+          {/* Left Column: Headline & Call-to-Action */}
           <div>
-            <motion.div
-              initial="hidden"
-              animate="show"
-              variants={staggerContainer}
-              className="space-y-8"
-            >
+            <motion.div className="space-y-8">
               <motion.div variants={fadeIn}>
-                <span className="inline-block px-3 py-1 text-xs font-semibold tracking-wider uppercase rounded-full bg-gradient-to-r from-indigo-500/10 via-blue-500/10 to-purple-500/10 border border-indigo-500/20 text-indigo-500 dark:text-indigo-400">
+                <span className="inline-block px-3 py-1 text-xs font-semibold font-inter tracking-wider uppercase rounded-full bg-gradient-to-r from-indigo-500/10 via-blue-500/10 to-purple-500/10 border border-indigo-500/20 text-indigo-500 dark:text-indigo-400">
                   Job Search Reinvented
                 </span>
               </motion.div>
-              <motion.div
-                className="mb-6 flex items-center"
+
+              <motion.h2
                 variants={fadeIn}
+                className="text-4xl md:text-5xl font-bold font-outfit tracking-tight"
               >
-                <span className="bg-indigo-500/10 text-indigo-500 px-3 py-1 rounded-full text-sm font-mono mr-2">v1.2.0</span>
-                <span className={`text-xs ${theme === "dark" ? "text-slate-500" : "text-slate-500"}`}>
-                  <motion.span
-                    animate={{ opacity: [0, 1] }}
-                    transition={{ duration: 0.5, delay: 0.5 }}
-                  >
-                    npm downloads:
-                  </motion.span>{" "}
-                  <motion.span
-                    className="font-semibold"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.2, delay: 1 }}
-                  >
-                    4,721
-                  </motion.span>
-                </span>
-              </motion.div>
+                Ready to <span className="text-indigo-500">Automate</span> Your Job Search?
+              </motion.h2>
 
-              <motion.h1
+              <motion.p
                 variants={fadeIn}
-                className="text-5xl md:text-6xl font-bold leading-tight font-mono"
+                className="text-xl max-w-lg mt-6 font-inter text-slate-600 dark:text-slate-300 leading-relaxed"
               >
-                <span className="block">
-                  <span className="text-indigo-500">#!/usr/bin/env</span>
-                  <motion.span
-                    className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 ml-2"
-                    animate={{
-                      backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-                    }}
-                    transition={{
-                      duration: 5,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                  >
-                    jjugg
-                  </motion.span>
-                </span>
-                <motion.span
-                  className="block mt-2"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3, delay: 0.5 }}
-                >
-                  $ cat job_search | automate
-                </motion.span>
-              </motion.h1>
+                Join the open-source movement revolutionizing job applications. No more manual tracking—our userscripts capture data as you apply, email parsers monitor status changes, and AI prepares you for interviews.
+              </motion.p>
 
-              <motion.div
-                variants={fadeIn}
-                className={`text-xl max-w-lg mt-6 ${theme === "dark" ? "text-slate-400" : "text-slate-600"} font-mono space-y-2 pl-4 border-l-2 border-indigo-500/30`}
-              >
-                <motion.div
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3, delay: 0.8 }}
-                  className="flex items-start"
-                >
-                  <span className="text-green-500 mr-2">→</span>
-                  <span>
-                    <span className="text-indigo-500 font-semibold">UserScript</span> captures job applications
-                  </span>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3, delay: 1.1 }}
-                  className="flex items-start"
-                >
-                  <span className="text-green-500 mr-2">→</span>
-                  <span>
-                    <span className="text-blue-500 font-semibold">Email parsers</span> track status changes
-                  </span>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3, delay: 1.4 }}
-                  className="flex items-start"
-                >
-                  <span className="text-green-500 mr-2">→</span>
-                  <span>
-                    <span className="text-purple-500 font-semibold">LLMs</span> prep you for interviews
-                  </span>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: [0, 1, 0] }}
-                  transition={{ duration: 1, repeat: Infinity, repeatDelay: 0.5, delay: 1.7 }}
-                  className="text-indigo-500/70"
-                >
-                  _
-                </motion.div>
-              </motion.div>
               <motion.div
                 variants={fadeIn}
                 className="flex flex-wrap gap-4"
               >
-                <Button asChild size="lg" className="font-mono rounded-full bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 hover:opacity-90 transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-1 group">
+                <Button
+                  asChild
+                  size="lg"
+                  className="font-inter rounded-full bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 hover:opacity-90 transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-1 group"
+                >
                   <a href="#installation">
                     <span className="mr-2">$</span> npm install -g jjugg-cli
                     <Code className="ml-2 h-4 w-4 transition-transform group-hover:rotate-12" />
                   </a>
                 </Button>
-                <Button asChild size="lg" variant="outline" className={`font-mono rounded-full ${theme === "dark" ? "hover:bg-slate-800" : "hover:bg-slate-100"} transition-all duration-300 hover:-translate-y-1`}>
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="font-inter rounded-full dark:hover:bg-slate-800 hover:bg-slate-100 transition-all duration-300 hover:-translate-y-1"
+                >
                   <a href="#features">Explore Features</a>
                 </Button>
               </motion.div>
             </motion.div>
           </div>
 
+          {/* Right Column: Product Preview Animation */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}
             className="relative"
           >
-            {/* App Preview Animation */}
             <HeroAnimation />
-
-            {/* Decorative elements */}
-            <div className="absolute -z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full">
-              <motion.div
-                className={`absolute top-0 -left-4 w-72 h-72 ${theme === "dark" ? "bg-indigo-500/10" : "bg-indigo-500/5"} rounded-full blur-3xl`}
-                animate={{
-                  scale: [1, 1.1, 1],
-                  opacity: [0.3, 0.5, 0.3],
-                  x: [0, -10, 0],
-                  y: [0, 10, 0],
-                }}
-                transition={{
-                  duration: 8,
-                  repeat: Infinity,
-                  repeatType: "reverse"
-                }}
-              />
-              <motion.div
-                className={`absolute bottom-0 -right-4 w-72 h-72 ${theme === "dark" ? "bg-purple-500/10" : "bg-purple-500/5"} rounded-full blur-3xl`}
-                animate={{
-                  scale: [1, 1.2, 1],
-                  opacity: [0.3, 0.6, 0.3],
-                  x: [0, 10, 0],
-                  y: [0, -10, 0]
-                }}
-                transition={{
-                  duration: 10,
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                  delay: 1
-                }}
-              />
-            </div>
+            {/* Optional decorative elements can be added here */}
           </motion.div>
-        </div>
+        </motion.div>
 
-        {/* Floating elements */}
-        <div className="absolute inset-0 pointer-events-none z-0">
-          <motion.div
-            className={`absolute w-96 h-96 border-2 ${theme === "dark" ? "border-indigo-500/10" : "border-indigo-500/5"} opacity-20 rounded-lg`}
-            style={{ top: '10%', left: '10%' }}
-            animate={{
-              y: [0, -20, 0],
-              rotate: [0, 5, 0]
-            }}
-            transition={{
-              duration: 15,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
-          <motion.div
-            className={`absolute w-72 h-72 border-2 ${theme === "dark" ? "border-blue-500/10" : "border-blue-500/5"} opacity-20 rounded-lg`}
-            style={{ bottom: '20%', right: '5%' }}
-            animate={{
-              y: [0, -20, 0],
-              rotate: [0, 5, 0]
-            }}
-            transition={{
-              duration: 15,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 2
-            }}
-          />
-          <motion.div
-            className={`absolute w-48 h-48 border-2 ${theme === "dark" ? "border-purple-500/10" : "border-purple-500/5"} opacity-20 rounded-lg`}
-            style={{ top: '40%', right: '30%' }}
-            animate={{
-              y: [0, -20, 0],
-              rotate: [0, 5, 0]
-            }}
-            transition={{
-              duration: 15,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 1
-            }}
-          />
-        </div>
-
-        {/* Scroll indicator */}
+        {/* Scroll Indicator */}
         <motion.div
           className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2, duration: 0.5 }}
         >
-          <span className={`text-sm ${theme === "dark" ? "text-slate-500" : "text-slate-400"}`}>Scroll to explore</span>
+          <span className="text-sm font-inter dark:text-slate-500 text-slate-400">
+            Scroll to explore
+          </span>
           <motion.div
-            className={`mt-2 w-6 h-10 rounded-full border-2 ${theme === "dark" ? "border-slate-700" : "border-slate-300"} flex justify-center p-1`}
+            className="mt-2 w-6 h-10 rounded-full border-2 dark:border-slate-700 border-slate-300 flex justify-center p-1"
             animate={{ y: [0, 5, 0] }}
             transition={{ duration: 1.5, repeat: Infinity }}
           >
             <motion.div
-              className={`w-1 h-2 rounded-full ${theme === "dark" ? "bg-slate-500" : "bg-slate-400"}`}
+              className="w-1 h-2 rounded-full dark:bg-slate-500 bg-slate-400"
               animate={{ y: [0, 6, 0] }}
               transition={{ duration: 1.5, repeat: Infinity }}
             />
@@ -1011,7 +847,7 @@ export default function Home() {
                   </div>
                   <div>
                     <h3 className={cn(
-                      "text-lg font-semibold mb-1",
+                      "text-lg font-semibold font-outfit mb-1",
                       theme === "dark" ? "text-white" : "text-slate-900"
                     )}>
                       {benefit.title}
@@ -1070,7 +906,7 @@ export default function Home() {
             <Tabs defaultValue="npm" className="w-full">
               <div className="flex justify-center mb-8">
                 <TabsList className={cn(
-                  "grid grid-cols-4 w-full max-w-xl",
+                  "grid grid-cols-4 w-full max-w-xl font-inter",
                   theme === "dark"
                     ? "bg-slate-800/80 text-slate-400"
                     : "bg-slate-100/80 text-slate-600"
@@ -1078,7 +914,7 @@ export default function Home() {
                   <TabsTrigger
                     value="npm"
                     className={cn(
-                      "data-[state=active]:bg-indigo-500 data-[state=active]:text-white font-mono flex items-center gap-1.5",
+                      "data-[state=active]:bg-indigo-500 data-[state=active]:text-white font-inter flex items-center gap-1.5",
                       theme === "dark"
                         ? "data-[state=active]:shadow-indigo-500/20 data-[state=active]:shadow-lg"
                         : "data-[state=active]:shadow-indigo-500/10"
@@ -1090,7 +926,7 @@ export default function Home() {
                   <TabsTrigger
                     value="cargo"
                     className={cn(
-                      "data-[state=active]:bg-orange-500 data-[state=active]:text-white font-mono flex items-center gap-1.5",
+                      "data-[state=active]:bg-orange-500 data-[state=active]:text-white font-inter flex items-center gap-1.5",
                       theme === "dark"
                         ? "data-[state=active]:shadow-orange-500/20 data-[state=active]:shadow-lg"
                         : "data-[state=active]:shadow-orange-500/10"
@@ -1102,7 +938,7 @@ export default function Home() {
                   <TabsTrigger
                     value="docker"
                     className={cn(
-                      "data-[state=active]:bg-blue-500 data-[state=active]:text-white font-mono flex items-center gap-1.5",
+                      "data-[state=active]:bg-blue-500 data-[state=active]:text-white font-inter flex items-center gap-1.5",
                       theme === "dark"
                         ? "data-[state=active]:shadow-blue-500/20 data-[state=active]:shadow-lg"
                         : "data-[state=active]:shadow-blue-500/10"
@@ -1114,7 +950,7 @@ export default function Home() {
                   <TabsTrigger
                     value="source"
                     className={cn(
-                      "data-[state=active]:bg-purple-500 data-[state=active]:text-white font-mono flex items-center gap-1.5",
+                      "data-[state=active]:bg-purple-500 data-[state=active]:text-white font-inter flex items-center gap-1.5",
                       theme === "dark"
                         ? "data-[state=active]:shadow-purple-500/20 data-[state=active]:shadow-lg"
                         : "data-[state=active]:shadow-purple-500/10"
@@ -1143,7 +979,7 @@ jjugg open`}
                   </CodeBlock>
 
                   <div className="p-4 rounded-lg bg-indigo-500/10 border border-indigo-500/30 mt-4">
-                    <h3 className="text-indigo-400 font-medium text-sm flex items-center mb-2">
+                    <h3 className="text-indigo-400 font-medium font-outfit text-sm flex items-center mb-2">
                       <Check className="w-4 h-4 mr-2" /> System Requirements
                     </h3>
                     <ul className="text-sm text-slate-400 space-y-1 ml-6 list-disc">
@@ -1170,7 +1006,7 @@ jjugg open`}
                   </CodeBlock>
 
                   <div className="p-4 rounded-lg bg-orange-500/10 border border-orange-500/30 mt-4">
-                    <h3 className="text-orange-400 font-medium text-sm flex items-center mb-2">
+                    <h3 className="text-orange-400 font-medium font-outfit text-sm flex items-center mb-2">
                       <Check className="w-4 h-4 mr-2" /> System Requirements
                     </h3>
                     <ul className="text-sm text-slate-400 space-y-1 ml-6 list-disc">
@@ -1201,7 +1037,7 @@ docker exec jjugg jjugg install-extension`}
                   </CodeBlock>
 
                   <div className="p-4 rounded-lg bg-blue-500/10 border border-blue-500/30 mt-4">
-                    <h3 className="text-blue-400 font-medium text-sm flex items-center mb-2">
+                    <h3 className="text-blue-400 font-medium font-outfit text-sm flex items-center mb-2">
                       <Check className="w-4 h-4 mr-2" /> System Requirements
                     </h3>
                     <ul className="text-sm text-slate-400 space-y-1 ml-6 list-disc">
@@ -1234,7 +1070,7 @@ npm run extension:install`}
                   </CodeBlock>
 
                   <div className="p-4 rounded-lg bg-purple-500/10 border border-purple-500/30 mt-4">
-                    <h3 className="text-purple-400 font-medium text-sm flex items-center mb-2">
+                    <h3 className="text-purple-400 font-medium font-outfit text-sm flex items-center mb-2">
                       <Check className="w-4 h-4 mr-2" /> System Requirements
                     </h3>
                     <ul className="text-sm text-slate-400 space-y-1 ml-6 list-disc">
@@ -1265,10 +1101,10 @@ npm run extension:install`}
                   <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
                   <div className="w-3 h-3 rounded-full bg-green-500"></div>
                 </div>
-                <div className="text-xs text-slate-400 mx-auto font-mono">terminal</div>
+                <div className="text-xs text-slate-400 mx-auto font-inter">terminal</div>
               </div>
 
-              <div className="p-4 max-h-64 overflow-y-auto font-mono text-sm text-slate-300">
+              <div className="p-4 max-h-64 overflow-y-auto font-inter text-sm text-slate-300">
                 <motion.div
                   className="space-y-1"
                   initial={{ opacity: 0 }}
@@ -1355,7 +1191,7 @@ npm run extension:install`}
               <a
                 href="#"
                 className={cn(
-                  "flex items-center px-5 py-2 rounded-full font-medium text-sm transition-all",
+                  "flex items-center px-5 py-2 rounded-full font-medium font-inter text-sm transition-all",
                   theme === "dark"
                     ? "text-indigo-400 hover:text-white bg-indigo-500/10 hover:bg-indigo-500/20"
                     : "text-indigo-700 hover:text-indigo-900 bg-indigo-100 hover:bg-indigo-200"
@@ -1406,13 +1242,13 @@ npm run extension:install`}
             variants={staggerContainer}
           >
             <motion.div variants={fadeIn} className="flex justify-center mb-4">
-              <span className="px-4 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-indigo-500/10 via-blue-500/10 to-purple-500/10 text-indigo-500 border border-indigo-500/20">
+              <span className="px-4 py-1 rounded-full text-sm font-medium font-inter bg-gradient-to-r from-indigo-500/10 via-blue-500/10 to-purple-500/10 text-indigo-500 border border-indigo-500/20">
                 Visual Tour
               </span>
             </motion.div>
             <motion.h2
               variants={fadeIn}
-              className="text-4xl md:text-5xl font-bold mb-4"
+              className="text-4xl md:text-5xl font-bold font-outfit tracking-tight mb-4"
             >
               See{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500">
@@ -1460,7 +1296,7 @@ npm run extension:install`}
                   initial={{ opacity: 0 }}
                   whileHover={{ opacity: 1 }}
                 >
-                  <h3 className="text-xl font-semibold text-white mb-1">{screenshot.title}</h3>
+                  <h3 className="text-xl font-semibold font-outfit text-white mb-1">{screenshot.title}</h3>
                   <p className="text-slate-300">{screenshot.description}</p>
                 </motion.div>
               </motion.div>
@@ -1498,7 +1334,7 @@ npm run extension:install`}
                     className="w-full h-auto rounded-xl border border-slate-700 shadow-2xl"
                   />
                   <div className="text-center mt-6">
-                    <h3 className="text-xl font-semibold text-white mb-1">{currentScreenshot.title}</h3>
+                    <h3 className="text-xl font-semibold font-outfit text-white mb-1">{currentScreenshot.title}</h3>
                     <p className="text-slate-400">{currentScreenshot.description}</p>
                   </div>
                 </motion.div>
@@ -1522,13 +1358,13 @@ npm run extension:install`}
             variants={staggerContainer}
           >
             <motion.div variants={fadeIn} className="flex justify-center mb-4">
-              <span className="px-4 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-indigo-500/10 via-blue-500/10 to-purple-500/10 text-indigo-500 border border-indigo-500/20">
+              <span className="px-4 py-1 rounded-full text-sm font-medium font-inter bg-gradient-to-r from-indigo-500/10 via-blue-500/10 to-purple-500/10 text-indigo-500 border border-indigo-500/20">
                 Data-Driven
               </span>
             </motion.div>
             <motion.h2
               variants={fadeIn}
-              className="text-4xl md:text-5xl font-bold mb-4"
+              className="text-4xl md:text-5xl font-bold font-outfit tracking-tight mb-4"
             >
               See Your{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500">
@@ -1537,7 +1373,7 @@ npm run extension:install`}
             </motion.h2>
             <motion.div
               variants={fadeIn}
-              className={`text-lg max-w-2xl mx-auto font-mono ${theme === "dark" ? "text-slate-400" : "text-slate-600"}`}
+              className={`text-lg max-w-2xl mx-auto font-inter ${theme === "dark" ? "text-slate-400" : "text-slate-600"}`}
             >
               <motion.span
                 initial={{ opacity: 1 }}
@@ -1575,7 +1411,7 @@ npm run extension:install`}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h3 className="text-lg font-medium mb-4">Monthly Job Applications</h3>
+            <h3 className="text-lg font-medium font-outfit mb-4">Monthly Job Applications</h3>
             <canvas ref={chartRef} className="w-full h-[300px]"></canvas>
           </motion.div>
         </div>
@@ -1602,13 +1438,13 @@ npm run extension:install`}
             variants={staggerContainer}
           >
             <motion.div variants={fadeIn} className="flex justify-center mb-4">
-              <span className="px-4 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-indigo-500/10 via-blue-500/10 to-purple-500/10 text-indigo-500 border border-indigo-500/20">
+              <span className="px-4 py-1 rounded-full text-sm font-medium font-inter bg-gradient-to-r from-indigo-500/10 via-blue-500/10 to-purple-500/10 text-indigo-500 border border-indigo-500/20">
                 Open Source
               </span>
             </motion.div>
             <motion.h2
               variants={fadeIn}
-              className="text-4xl md:text-5xl font-bold mb-4"
+              className="text-4xl md:text-5xl font-bold font-outfit tracking-tight mb-4"
             >
               Community{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500">
@@ -1653,7 +1489,7 @@ npm run extension:install`}
                     {contribution.icon}
                   </motion.div>
                 </div>
-                <h3 className="text-xl font-semibold mb-4">{contribution.title}</h3>
+                <h3 className="text-xl font-semibold font-outfit mb-4">{contribution.title}</h3>
                 <p className={theme === "dark" ? "text-slate-400" : "text-slate-600"}>{contribution.description}</p>
               </motion.div>
             ))}
@@ -1666,7 +1502,7 @@ npm run extension:install`}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h3 className="text-2xl font-semibold mb-8">Meet Our Top Contributors</h3>
+            <h3 className="text-2xl font-semibold font-outfit mb-8">Meet Our Top Contributors</h3>
             <div className="flex flex-wrap justify-center gap-10 mb-12">
               {[1, 2, 3].map((i) => (
                 <motion.div
@@ -1688,7 +1524,7 @@ npm run extension:install`}
                       </div>
                     </div>
                   </div>
-                  <p className="font-medium">Contributor {i}</p>
+                  <p className="font-medium font-inter">Contributor {i}</p>
                   <p className={`text-sm ${theme === "dark" ? "text-slate-400" : "text-slate-600"}`}>
                     {i === 1 ? "UI Designer" : i === 2 ? "Backend Dev" : "Feature Lead"}
                   </p>
@@ -1699,7 +1535,7 @@ npm run extension:install`}
               whileHover={{ scale: 1.03 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
-              <Button asChild size="lg" className="font-mono rounded-full bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 hover:opacity-90 transition-all duration-300 shadow-md hover:shadow-xl group">
+              <Button asChild size="lg" className="font-inter rounded-full bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 hover:opacity-90 transition-all duration-300 shadow-md hover:shadow-xl group">
                 <a href="https://github.com/jjugg" target="_blank" rel="noopener noreferrer">
                   Contribute Now
                   <Github className="ml-2 h-4 w-4 transition-all duration-300 group-hover:rotate-12" />
@@ -1738,7 +1574,7 @@ npm run extension:install`}
             >
               <motion.h2
                 variants={fadeIn}
-                className="text-4xl md:text-5xl font-bold mb-4 text-center"
+                className="text-4xl md:text-5xl font-bold font-outfit tracking-tight mb-4 text-center"
               >
                 Ready to{" "}
                 <motion.span
@@ -1772,10 +1608,10 @@ npm run extension:install`}
                   <Input
                     type="email"
                     placeholder="Your Email"
-                    className={`h-12 px-5 rounded-full shadow-inner font-mono ${theme === "dark" ? "bg-slate-800 border-slate-700 focus:border-indigo-500/50 focus:ring-indigo-500/30" : "bg-white border-slate-300 focus:border-indigo-500/50 focus:ring-indigo-500/30"}`}
+                    className={`h-12 px-5 rounded-full shadow-inner font-inter ${theme === "dark" ? "bg-slate-800 border-slate-700 focus:border-indigo-500/50 focus:ring-indigo-500/30" : "bg-white border-slate-300 focus:border-indigo-500/50 focus:ring-indigo-500/30"}`}
                     required
                   />
-                  <Button size="lg" className="font-mono rounded-full bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 hover:opacity-90 transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-0.5 px-6 whitespace-nowrap">
+                  <Button size="lg" className="font-inter rounded-full bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 hover:opacity-90 transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-0.5 px-6 whitespace-nowrap">
                     Get Started Free
                   </Button>
                 </motion.div>
@@ -1799,7 +1635,7 @@ npm run extension:install`}
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
             <div className="space-y-4">
-              <h3 className="text-2xl font-bold font-mono">
+              <h3 className="text-2xl font-bold font-outfit tracking-tight">
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500">
                   jjugg
                 </span>
@@ -1861,7 +1697,7 @@ npm run extension:install`}
               }
             ].map((column, i) => (
               <div key={i}>
-                <h4 className="text-lg font-semibold mb-4 font-mono">{column.title}</h4>
+                <h4 className="text-lg font-semibold mb-4 font-outfit">{column.title}</h4>
                 <ul className="space-y-2">
                   {column.links.map((link, j) => (
                     <li key={j}>
