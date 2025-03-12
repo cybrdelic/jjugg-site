@@ -2,10 +2,10 @@
 
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionTemplate } from 'framer-motion';
-import { 
-  Sun, Moon, ChevronRight, Github, Twitter, Instagram, Facebook, 
-  Check, Globe, FileText, Layout, ArrowRight, Zap, BarChart3, 
-  Code, Mail, Shield, Terminal, BrowserIcon, Database, Server,
+import {
+  Sun, Moon, ChevronRight, Github, Twitter, Instagram, Facebook,
+  Check, Globe, FileText, Layout, ArrowRight, Zap, BarChart3,
+  Code, Mail, Shield, Terminal, Database, Server,
   Sparkles, UserCircle2, Laptop, MonitorSmartphone, Package, Workflow as WorkflowIcon,
   Cpu, Bot, Brain, Key, LockIcon
 } from 'lucide-react';
@@ -123,7 +123,7 @@ export default function Home() {
   const { theme, setTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  
+
   const canvasRef = useRef(null);
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
@@ -131,14 +131,14 @@ export default function Home() {
 
   // Define spring config
   const springConfig = { damping: 40, stiffness: 100 };
-  
+
   // Define all motion hooks here
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], [0, 300]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const mouseXSpring = useSpring(0, springConfig);
   const mouseYSpring = useSpring(0, springConfig);
-  
+
   // Define gradient here using motion template
   const gradient = useMotionTemplate`
     radial-gradient(
@@ -171,23 +171,23 @@ export default function Home() {
 
     window.addEventListener('mousemove', updateMousePosition);
     return () => window.removeEventListener('mousemove', updateMousePosition);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mounted]);
 
   // Initialize shader and chart when component is mounted
   useEffect(() => {
     if (!mounted) return;
-    
+
     // Initialize shader background
     if (canvasRef.current) {
       initShaderBackground();
     }
-    
+
     // Initialize chart
     if (chartRef.current) {
       initChart();
     }
-    
+
     return () => {
       if (chartInstance.current) {
         chartInstance.current.destroy();
@@ -198,7 +198,7 @@ export default function Home() {
   // Update shader colors when theme changes
   useEffect(() => {
     if (!mounted) return;
-    
+
     // Update chart colors
     if (chartInstance.current) {
       updateChartColors();
@@ -352,7 +352,7 @@ export default function Home() {
 
   const initChart = () => {
     const ctx = chartRef.current.getContext('2d');
-    
+
     chartInstance.current = new Chart(ctx, {
       type: 'bar',
       data: {
@@ -386,8 +386,8 @@ export default function Home() {
       },
       options: {
         responsive: true,
-        scales: { 
-          y: { 
+        scales: {
+          y: {
             beginAtZero: true,
             ticks: {
               color: theme === 'dark' ? '#cccccc' : '#333333'
@@ -405,12 +405,12 @@ export default function Home() {
             }
           }
         },
-        plugins: { 
-          legend: { 
-            labels: { 
-              color: theme === 'dark' ? '#ffffff' : '#000000' 
-            } 
-          } 
+        plugins: {
+          legend: {
+            labels: {
+              color: theme === 'dark' ? '#ffffff' : '#000000'
+            }
+          }
         }
       }
     });
@@ -418,13 +418,13 @@ export default function Home() {
 
   const updateChartColors = () => {
     if (!chartInstance.current) return;
-    
+
     chartInstance.current.options.scales.y.ticks.color = theme === 'dark' ? '#cccccc' : '#333333';
     chartInstance.current.options.scales.x.ticks.color = theme === 'dark' ? '#cccccc' : '#333333';
     chartInstance.current.options.scales.y.grid.color = theme === 'dark' ? '#333333' : '#eeeeee';
     chartInstance.current.options.scales.x.grid.color = theme === 'dark' ? '#333333' : '#eeeeee';
     chartInstance.current.options.plugins.legend.labels.color = theme === 'dark' ? '#ffffff' : '#000000';
-    
+
     chartInstance.current.update();
   };
 
@@ -445,8 +445,8 @@ export default function Home() {
 
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
-    show: { 
-      opacity: 1, 
+    show: {
+      opacity: 1,
       y: 0,
       transition: {
         type: "spring",
@@ -458,8 +458,8 @@ export default function Home() {
 
   const slideInLeft = {
     hidden: { opacity: 0, x: -50 },
-    show: { 
-      opacity: 1, 
+    show: {
+      opacity: 1,
       x: 0,
       transition: {
         type: "spring",
@@ -471,8 +471,8 @@ export default function Home() {
 
   const slideInRight = {
     hidden: { opacity: 0, x: 50 },
-    show: { 
-      opacity: 1, 
+    show: {
+      opacity: 1,
       x: 0,
       transition: {
         type: "spring",
@@ -484,8 +484,8 @@ export default function Home() {
 
   const scaleUp = {
     hidden: { opacity: 0, scale: 0.8 },
-    show: { 
-      opacity: 1, 
+    show: {
+      opacity: 1,
       scale: 1,
       transition: {
         type: "spring",
@@ -500,9 +500,9 @@ export default function Home() {
     <div className={`min-h-screen transition-colors duration-300 ${theme === "dark" ? "bg-slate-950 text-white" : "bg-white text-slate-900"}`}>
       {/* Shader Background Canvas */}
       <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full -z-10"></canvas>
-      
+
       {/* Mouse gradient follower */}
-      <motion.div 
+      <motion.div
         className="fixed inset-0 z-[-5] pointer-events-none"
         style={{ background: gradient }}
       />
@@ -524,8 +524,8 @@ export default function Home() {
       <nav className={`fixed top-0 left-0 w-full py-6 z-40 backdrop-blur-md border-b transition-colors duration-300
       ${theme === "dark" ? "border-slate-800/60 bg-slate-950/60" : "border-slate-200/60 bg-white/60"}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-          <motion.a 
-            href="#" 
+          <motion.a
+            href="#"
             className="text-3xl font-bold font-mono"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -538,9 +538,9 @@ export default function Home() {
           </motion.a>
           <div className={`hidden md:flex space-x-8 font-mono text-sm`}>
             {["how-it-works", "features", "installation", "screenshots", "analytics-demo", "community-contributions", "cta"].map((item, index) => (
-              <motion.a 
+              <motion.a
                 key={item}
-                href={`#${item}`} 
+                href={`#${item}`}
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 * index }}
@@ -548,11 +548,11 @@ export default function Home() {
                 ${theme === "dark" ? "text-slate-400 hover:text-white after:bg-indigo-500" : "text-slate-600 hover:text-slate-900 after:bg-indigo-500"}`}
               >
                 {item === "how-it-works" ? "How It Works" :
-                 item === "analytics-demo" ? "Analytics" : 
-                 item === "community-contributions" ? "Community" : 
-                 item === "installation" ? "Install" :
-                 item === "cta" ? "Get Started" : 
-                 item.charAt(0).toUpperCase() + item.slice(1)}
+                  item === "analytics-demo" ? "Analytics" :
+                    item === "community-contributions" ? "Community" :
+                      item === "installation" ? "Install" :
+                        item === "cta" ? "Get Started" :
+                          item.charAt(0).toUpperCase() + item.slice(1)}
               </motion.a>
             ))}
           </div>
@@ -565,7 +565,7 @@ export default function Home() {
               Get Started
             </Button>
           </motion.div>
-          <button 
+          <button
             className="md:hidden"
             onClick={toggleMobileMenu}
             aria-label="Toggle menu"
@@ -577,7 +577,7 @@ export default function Home() {
             </svg>
           </button>
         </div>
-        
+
         {/* Mobile Menu */}
         <AnimatePresence>
           {mobileMenuOpen && (
@@ -606,29 +606,29 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section 
+      <section
         ref={heroRef}
-        className="min-h-screen flex items-center px-4 sm:px-6 lg:px-8 pt-16 relative overflow-hidden" 
+        className="min-h-screen flex items-center px-4 sm:px-6 lg:px-8 pt-16 relative overflow-hidden"
         id="hero"
       >
-        <motion.div 
+        <motion.div
           className="absolute inset-0 w-full h-full"
           style={{ y, opacity }}
         />
-        
+
         {/* Animated particles for browser extension, email, and code integration */}
         <div className="absolute inset-0 pointer-events-none">
           {[...Array(15)].map((_, i) => (
             <motion.div
               key={`particle-${i}`}
               className="absolute"
-              initial={{ 
-                left: `${Math.random() * 100}%`, 
+              initial={{
+                left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
                 opacity: 0,
                 scale: 0
               }}
-              animate={{ 
+              animate={{
                 left: [`${Math.random() * 100}%`, `${Math.random() * 100}%`, `${Math.random() * 100}%`],
                 top: [`${Math.random() * 100}%`, `${Math.random() * 100}%`, `${Math.random() * 100}%`],
                 opacity: [0, 0.7, 0],
@@ -665,7 +665,7 @@ export default function Home() {
                   Job Search Reinvented
                 </span>
               </motion.div>
-              <motion.div 
+              <motion.div
                 className="mb-6 flex items-center"
                 variants={fadeIn}
               >
@@ -687,28 +687,28 @@ export default function Home() {
                   </motion.span>
                 </span>
               </motion.div>
-              
-              <motion.h1 
+
+              <motion.h1
                 variants={fadeIn}
                 className="text-5xl md:text-6xl font-bold leading-tight font-mono"
               >
                 <span className="block">
-                  <span className="text-indigo-500">#!/usr/bin/env</span> 
-                  <motion.span 
+                  <span className="text-indigo-500">#!/usr/bin/env</span>
+                  <motion.span
                     className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 ml-2"
-                    animate={{ 
+                    animate={{
                       backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
                     }}
-                    transition={{ 
-                      duration: 5, 
-                      repeat: Infinity, 
-                      ease: "easeInOut" 
+                    transition={{
+                      duration: 5,
+                      repeat: Infinity,
+                      ease: "easeInOut"
                     }}
                   >
                     jjugg
                   </motion.span>
                 </span>
-                <motion.span 
+                <motion.span
                   className="block mt-2"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -717,12 +717,12 @@ export default function Home() {
                   $ cat job_search | automate
                 </motion.span>
               </motion.h1>
-              
-              <motion.div 
+
+              <motion.div
                 variants={fadeIn}
                 className={`text-xl max-w-lg mt-6 ${theme === "dark" ? "text-slate-400" : "text-slate-600"} font-mono space-y-2 pl-4 border-l-2 border-indigo-500/30`}
               >
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3, delay: 0.8 }}
@@ -733,8 +733,8 @@ export default function Home() {
                     <span className="text-indigo-500 font-semibold">UserScript</span> captures job applications
                   </span>
                 </motion.div>
-                
-                <motion.div 
+
+                <motion.div
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3, delay: 1.1 }}
@@ -745,8 +745,8 @@ export default function Home() {
                     <span className="text-blue-500 font-semibold">Email parsers</span> track status changes
                   </span>
                 </motion.div>
-                
-                <motion.div 
+
+                <motion.div
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3, delay: 1.4 }}
@@ -757,8 +757,8 @@ export default function Home() {
                     <span className="text-purple-500 font-semibold">LLMs</span> prep you for interviews
                   </span>
                 </motion.div>
-                
-                <motion.div 
+
+                <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: [0, 1, 0] }}
                   transition={{ duration: 1, repeat: Infinity, repeatDelay: 0.5, delay: 1.7 }}
@@ -767,7 +767,7 @@ export default function Home() {
                   _
                 </motion.div>
               </motion.div>
-              <motion.div 
+              <motion.div
                 variants={fadeIn}
                 className="flex flex-wrap gap-4"
               >
@@ -807,20 +807,20 @@ export default function Home() {
                   <div className="text-xs text-slate-400 mx-auto">jjugg Application Manager</div>
                 </div>
                 <div className="relative h-[300px] md:h-[400px]">
-                  <Image 
-                    src="/dashboard.jpg" 
-                    alt="jjugg Dashboard" 
+                  <Image
+                    src="/dashboard.jpg"
+                    alt="jjugg Dashboard"
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 50vw"
                   />
-                  
+
                   {/* Animated data flow */}
                   <div className="absolute inset-0 z-10 overflow-hidden pointer-events-none">
                     {/* Browser extension icon */}
-                    <motion.div 
+                    <motion.div
                       className="absolute top-6 left-6 bg-white/10 backdrop-blur-md rounded-md p-2 border border-indigo-500/30 shadow-lg"
-                      animate={{ 
+                      animate={{
                         scale: [1, 1.05, 1],
                         borderColor: [
                           'rgba(99, 102, 241, 0.3)',
@@ -828,7 +828,7 @@ export default function Home() {
                           'rgba(99, 102, 241, 0.3)'
                         ]
                       }}
-                      transition={{ 
+                      transition={{
                         duration: 3,
                         repeat: Infinity,
                         repeatType: "reverse"
@@ -843,13 +843,13 @@ export default function Home() {
                         key={`packet-${i}`}
                         className="absolute h-2 w-2 rounded-full bg-indigo-500"
                         initial={{ x: 40, y: 40, opacity: 0, scale: 0 }}
-                        animate={{ 
+                        animate={{
                           x: [40, 100, 160, 220],
                           y: [40, 90, 140, 200],
                           opacity: [0, 1, 1, 0],
                           scale: [0, 1, 1, 0]
                         }}
-                        transition={{ 
+                        transition={{
                           duration: 4,
                           delay: i * 0.8,
                           repeat: Infinity,
@@ -859,9 +859,9 @@ export default function Home() {
                     ))}
 
                     {/* Email integration icon */}
-                    <motion.div 
+                    <motion.div
                       className="absolute top-6 right-6 bg-white/10 backdrop-blur-md rounded-md p-2 border border-blue-500/30 shadow-lg"
-                      animate={{ 
+                      animate={{
                         scale: [1, 1.05, 1],
                         borderColor: [
                           'rgba(59, 130, 246, 0.3)',
@@ -869,7 +869,7 @@ export default function Home() {
                           'rgba(59, 130, 246, 0.3)'
                         ]
                       }}
-                      transition={{ 
+                      transition={{
                         duration: 3,
                         repeat: Infinity,
                         repeatType: "reverse",
@@ -885,13 +885,13 @@ export default function Home() {
                         key={`mail-${i}`}
                         className="absolute h-2 w-2 rounded-full bg-blue-500"
                         initial={{ x: 300, y: 40, opacity: 0, scale: 0 }}
-                        animate={{ 
+                        animate={{
                           x: [300, 240, 180, 120],
                           y: [40, 70, 100, 150],
                           opacity: [0, 1, 1, 0],
                           scale: [0, 1, 1, 0]
                         }}
-                        transition={{ 
+                        transition={{
                           duration: 4,
                           delay: i * 0.8 + 2,
                           repeat: Infinity,
@@ -906,30 +906,30 @@ export default function Home() {
 
             {/* Decorative elements */}
             <div className="absolute -z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full">
-              <motion.div 
+              <motion.div
                 className="absolute top-0 -left-4 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl"
-                animate={{ 
+                animate={{
                   scale: [1, 1.1, 1],
                   opacity: [0.3, 0.5, 0.3],
                   x: [0, -10, 0],
                   y: [0, 10, 0],
                 }}
-                transition={{ 
-                  duration: 8, 
+                transition={{
+                  duration: 8,
                   repeat: Infinity,
-                  repeatType: "reverse" 
+                  repeatType: "reverse"
                 }}
               />
-              <motion.div 
+              <motion.div
                 className="absolute bottom-0 -right-4 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl"
-                animate={{ 
+                animate={{
                   scale: [1, 1.2, 1],
                   opacity: [0.3, 0.6, 0.3],
                   x: [0, 10, 0],
                   y: [0, -10, 0]
                 }}
-                transition={{ 
-                  duration: 10, 
+                transition={{
+                  duration: 10,
                   repeat: Infinity,
                   repeatType: "reverse",
                   delay: 1
@@ -985,19 +985,19 @@ export default function Home() {
         </div>
 
         {/* Scroll indicator */}
-        <motion.div 
+        <motion.div
           className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2, duration: 0.5 }}
         >
           <span className={`text-sm ${theme === "dark" ? "text-slate-500" : "text-slate-400"}`}>Scroll to explore</span>
-          <motion.div 
+          <motion.div
             className={`mt-2 w-6 h-10 rounded-full border-2 ${theme === "dark" ? "border-slate-700" : "border-slate-300"} flex justify-center p-1`}
             animate={{ y: [0, 5, 0] }}
             transition={{ duration: 1.5, repeat: Infinity }}
           >
-            <motion.div 
+            <motion.div
               className={`w-1 h-2 rounded-full ${theme === "dark" ? "bg-slate-500" : "bg-slate-400"}`}
               animate={{ y: [0, 6, 0] }}
               transition={{ duration: 1.5, repeat: Infinity }}
@@ -1015,18 +1015,18 @@ export default function Home() {
             description="A seamless end-to-end solution that automates job tracking from application to interview."
             theme={theme}
           />
-          
+
           <div className="grid lg:grid-cols-2 gap-12 mt-16">
             {/* Left side: workflow visualization */}
             <div>
               <Workflow theme={theme} />
             </div>
-            
+
             {/* Right side: Features */}
             <div className="space-y-6">
               <div className="grid sm:grid-cols-2 gap-4">
                 <FeatureCard
-                  icon={<BrowserIcon className="w-6 h-6 text-indigo-500" />}
+                  icon={<Database className="w-6 h-6 text-indigo-500" />}
                   title="Capture"
                   description="Browser extensions detect and save job applications as you apply."
                   badge="UserScripts"
@@ -1034,7 +1034,7 @@ export default function Home() {
                   theme={theme}
                   index={0}
                 />
-                
+
                 <FeatureCard
                   icon={<Database className="w-6 h-6 text-blue-500" />}
                   title="Sync"
@@ -1045,7 +1045,7 @@ export default function Home() {
                   index={1}
                 />
               </div>
-              
+
               <div className="grid sm:grid-cols-2 gap-4">
                 <FeatureCard
                   icon={<Mail className="w-6 h-6 text-purple-500" />}
@@ -1056,7 +1056,7 @@ export default function Home() {
                   theme={theme}
                   index={2}
                 />
-                
+
                 <FeatureCard
                   icon={<Sparkles className="w-6 h-6 text-green-500" />}
                   title="Prepare"
@@ -1067,7 +1067,7 @@ export default function Home() {
                   index={3}
                 />
               </div>
-              
+
               {/* Code example */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -1077,7 +1077,7 @@ export default function Home() {
                 className="mt-8"
               >
                 <CodeBlock language="javascript" showLineNumbers={true} className="shadow-lg">
-{`// Example of userscript code for LinkedIn job application
+                  {`// Example of userscript code for LinkedIn job application
 // @name     jjugg - LinkedIn Application Tracker
 // @version  1.0
 // @match    *://*.linkedin.com/jobs/*
@@ -1086,7 +1086,7 @@ export default function Home() {
   // Detect when a job application is submitted
   document.addEventListener('click', async (e) => {
     if (e.target.textContent.includes('Submit application')) {
-      
+
       // Extract job details
       const jobData = {
         title: document.querySelector('.job-title').textContent,
@@ -1096,16 +1096,16 @@ export default function Home() {
         source: 'linkedin',
         status: 'applied'
       };
-      
+
       // Store in localStorage until sync
       localStorage.setItem(
-        'jjugg_applications', 
+        'jjugg_applications',
         JSON.stringify([
           ...JSON.parse(localStorage.getItem('jjugg_applications') || '[]'),
           jobData
         ])
       );
-      
+
       console.log('jjugg captured application:', jobData);
     }
   });
@@ -1114,7 +1114,7 @@ export default function Home() {
               </motion.div>
             </div>
           </div>
-          
+
           {/* Key benefits */}
           <div className="mt-20">
             <div className="grid md:grid-cols-3 gap-8">
@@ -1146,8 +1146,8 @@ export default function Home() {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   className={cn(
                     "p-6 rounded-xl border backdrop-blur-sm flex items-start gap-4",
-                    theme === "dark" 
-                      ? "bg-slate-900/40 border-slate-800" 
+                    theme === "dark"
+                      ? "bg-slate-900/40 border-slate-800"
                       : "bg-white/40 border-slate-200"
                   )}
                 >
@@ -1179,7 +1179,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      
+
       {/* Features Section */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 relative" id="features">
         <div className="max-w-7xl mx-auto">
@@ -1189,7 +1189,7 @@ export default function Home() {
             description="jjugg combines the best technologies to make your job search seamless and stress-free."
             theme={theme}
           />
-          
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
             {FEATURES.map((feature, index) => (
               <FeatureCard
@@ -1217,59 +1217,59 @@ export default function Home() {
             description="Choose your preferred installation method and start automating your job search today."
             theme={theme}
           />
-          
+
           {/* Installation Tabs */}
           <div className="max-w-4xl mx-auto">
             <Tabs defaultValue="npm" className="w-full">
               <div className="flex justify-center mb-8">
                 <TabsList className={cn(
                   "grid grid-cols-4 w-full max-w-xl",
-                  theme === "dark" 
-                    ? "bg-slate-800/80 text-slate-400" 
+                  theme === "dark"
+                    ? "bg-slate-800/80 text-slate-400"
                     : "bg-slate-100/80 text-slate-600"
                 )}>
-                  <TabsTrigger 
-                    value="npm" 
+                  <TabsTrigger
+                    value="npm"
                     className={cn(
                       "data-[state=active]:bg-indigo-500 data-[state=active]:text-white font-mono flex items-center gap-1.5",
-                      theme === "dark" 
-                        ? "data-[state=active]:shadow-indigo-500/20 data-[state=active]:shadow-lg" 
+                      theme === "dark"
+                        ? "data-[state=active]:shadow-indigo-500/20 data-[state=active]:shadow-lg"
                         : "data-[state=active]:shadow-indigo-500/10"
                     )}
                   >
                     <Package className="h-4 w-4" />
                     npm
                   </TabsTrigger>
-                  <TabsTrigger 
-                    value="cargo" 
+                  <TabsTrigger
+                    value="cargo"
                     className={cn(
                       "data-[state=active]:bg-orange-500 data-[state=active]:text-white font-mono flex items-center gap-1.5",
-                      theme === "dark" 
-                        ? "data-[state=active]:shadow-orange-500/20 data-[state=active]:shadow-lg" 
+                      theme === "dark"
+                        ? "data-[state=active]:shadow-orange-500/20 data-[state=active]:shadow-lg"
                         : "data-[state=active]:shadow-orange-500/10"
                     )}
                   >
                     <Package className="h-4 w-4" />
                     cargo
                   </TabsTrigger>
-                  <TabsTrigger 
-                    value="docker" 
+                  <TabsTrigger
+                    value="docker"
                     className={cn(
                       "data-[state=active]:bg-blue-500 data-[state=active]:text-white font-mono flex items-center gap-1.5",
-                      theme === "dark" 
-                        ? "data-[state=active]:shadow-blue-500/20 data-[state=active]:shadow-lg" 
+                      theme === "dark"
+                        ? "data-[state=active]:shadow-blue-500/20 data-[state=active]:shadow-lg"
                         : "data-[state=active]:shadow-blue-500/10"
                     )}
                   >
                     <Package className="h-4 w-4" />
                     docker
                   </TabsTrigger>
-                  <TabsTrigger 
-                    value="source" 
+                  <TabsTrigger
+                    value="source"
                     className={cn(
                       "data-[state=active]:bg-purple-500 data-[state=active]:text-white font-mono flex items-center gap-1.5",
-                      theme === "dark" 
-                        ? "data-[state=active]:shadow-purple-500/20 data-[state=active]:shadow-lg" 
+                      theme === "dark"
+                        ? "data-[state=active]:shadow-purple-500/20 data-[state=active]:shadow-lg"
                         : "data-[state=active]:shadow-purple-500/10"
                     )}
                   >
@@ -1278,11 +1278,11 @@ export default function Home() {
                   </TabsTrigger>
                 </TabsList>
               </div>
-              
+
               <div className="mt-8">
                 <TabsContent value="npm" className="space-y-4">
                   <CodeBlock language="bash" className="shadow-lg">
-{`# Install jjugg CLI globally
+                    {`# Install jjugg CLI globally
 npm install -g jjugg-cli
 
 # Install browser extension
@@ -1294,7 +1294,7 @@ jjugg start
 # Open dashboard in your browser
 jjugg open`}
                   </CodeBlock>
-                  
+
                   <div className="p-4 rounded-lg bg-indigo-500/10 border border-indigo-500/30 mt-4">
                     <h3 className="text-indigo-400 font-medium text-sm flex items-center mb-2">
                       <Check className="w-4 h-4 mr-2" /> System Requirements
@@ -1306,10 +1306,10 @@ jjugg open`}
                     </ul>
                   </div>
                 </TabsContent>
-                
+
                 <TabsContent value="cargo" className="space-y-4">
                   <CodeBlock language="bash" className="shadow-lg">
-{`# Install jjugg from crates.io
+                    {`# Install jjugg from crates.io
 cargo install jjugg
 
 # Install browser extension
@@ -1321,7 +1321,7 @@ jjugg start
 # Open dashboard in your browser
 jjugg open`}
                   </CodeBlock>
-                  
+
                   <div className="p-4 rounded-lg bg-orange-500/10 border border-orange-500/30 mt-4">
                     <h3 className="text-orange-400 font-medium text-sm flex items-center mb-2">
                       <Check className="w-4 h-4 mr-2" /> System Requirements
@@ -1334,10 +1334,10 @@ jjugg open`}
                     </ul>
                   </div>
                 </TabsContent>
-                
+
                 <TabsContent value="docker" className="space-y-4">
                   <CodeBlock language="bash" className="shadow-lg">
-{`# Pull the Docker image
+                    {`# Pull the Docker image
 docker pull jjugg/jjugg-app:latest
 
 # Run the container
@@ -1352,7 +1352,7 @@ docker run -d \\
 # Install browser extension separately
 docker exec jjugg jjugg install-extension`}
                   </CodeBlock>
-                  
+
                   <div className="p-4 rounded-lg bg-blue-500/10 border border-blue-500/30 mt-4">
                     <h3 className="text-blue-400 font-medium text-sm flex items-center mb-2">
                       <Check className="w-4 h-4 mr-2" /> System Requirements
@@ -1364,10 +1364,10 @@ docker exec jjugg jjugg install-extension`}
                     </ul>
                   </div>
                 </TabsContent>
-                
+
                 <TabsContent value="source" className="space-y-4">
                   <CodeBlock language="bash" className="shadow-lg">
-{`# Clone the repository
+                    {`# Clone the repository
 git clone https://github.com/jjugg/jjugg.git
 
 # Navigate to project directory
@@ -1385,7 +1385,7 @@ npm start
 # Install extension
 npm run extension:install`}
                   </CodeBlock>
-                  
+
                   <div className="p-4 rounded-lg bg-purple-500/10 border border-purple-500/30 mt-4">
                     <h3 className="text-purple-400 font-medium text-sm flex items-center mb-2">
                       <Check className="w-4 h-4 mr-2" /> System Requirements
@@ -1400,7 +1400,7 @@ npm run extension:install`}
                 </TabsContent>
               </div>
             </Tabs>
-              
+
             {/* Terminal output simulation */}
             <motion.div
               className={cn(
@@ -1420,9 +1420,9 @@ npm run extension:install`}
                 </div>
                 <div className="text-xs text-slate-400 mx-auto font-mono">terminal</div>
               </div>
-              
+
               <div className="p-4 max-h-64 overflow-y-auto font-mono text-sm text-slate-300">
-                <motion.div 
+                <motion.div
                   className="space-y-1"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
@@ -1439,15 +1439,15 @@ npm run extension:install`}
                       npm install -g jjugg-cli
                     </motion.span>
                   </div>
-                  
-                  <motion.div 
+
+                  <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.5, delay: 0.7 }}
                   >
                     <span className="text-blue-400">added</span> 247 packages in 3.2s
                   </motion.div>
-                  
+
                   <div className="flex mt-2">
                     <span className="text-green-400 mr-2">$</span>
                     <motion.span
@@ -1458,7 +1458,7 @@ npm run extension:install`}
                       jjugg start
                     </motion.span>
                   </div>
-                  
+
                   <motion.div
                     className="space-y-1 mt-1"
                     initial={{ opacity: 0 }}
@@ -1475,7 +1475,7 @@ npm run extension:install`}
                     <div><span className="text-blue-400">info</span> Starting web server on port 3000...</div>
                     <div><span className="text-green-400">success</span> jjugg is running at <span className="text-yellow-300">http://localhost:3000</span></div>
                   </motion.div>
-                  
+
                   <div className="flex mt-2">
                     <motion.span
                       className="text-slate-300"
@@ -1496,21 +1496,21 @@ npm run extension:install`}
                 </motion.div>
               </div>
             </motion.div>
-            
+
             {/* Documentation link */}
-            <motion.div 
+            <motion.div
               className="flex justify-center items-center mt-8 mb-4"
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
-              <a 
-                href="#" 
+              <a
+                href="#"
                 className={cn(
                   "flex items-center px-5 py-2 rounded-full font-medium text-sm transition-all",
-                  theme === "dark" 
-                    ? "text-indigo-400 hover:text-white bg-indigo-500/10 hover:bg-indigo-500/20" 
+                  theme === "dark"
+                    ? "text-indigo-400 hover:text-white bg-indigo-500/10 hover:bg-indigo-500/20"
                     : "text-indigo-700 hover:text-indigo-900 bg-indigo-100 hover:bg-indigo-200"
                 )}
               >
@@ -1521,7 +1521,7 @@ npm run extension:install`}
             </motion.div>
           </div>
         </div>
-        
+
         {/* Cool animated code background */}
         <div className="absolute inset-0 -z-10 opacity-5 pointer-events-none overflow-hidden">
           <motion.div
@@ -1551,7 +1551,7 @@ npm run extension:install`}
       {/* Screenshots Section */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 relative" id="screenshots">
         <div className="max-w-7xl mx-auto">
-          <motion.div 
+          <motion.div
             className="text-center mb-16"
             initial="hidden"
             whileInView="show"
@@ -1563,7 +1563,7 @@ npm run extension:install`}
                 Visual Tour
               </span>
             </motion.div>
-            <motion.h2 
+            <motion.h2
               variants={fadeIn}
               className="text-4xl md:text-5xl font-bold mb-4"
             >
@@ -1573,14 +1573,14 @@ npm run extension:install`}
               </span>
               {" "}in Action
             </motion.h2>
-            <motion.p 
+            <motion.p
               variants={fadeIn}
               className={`text-lg max-w-2xl mx-auto ${theme === "dark" ? "text-slate-400" : "text-slate-600"}`}
             >
               Explore the intuitive interface and powerful features of jjugg through these screenshots.
             </motion.p>
           </motion.div>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             {SCREENSHOTS.map((screenshot, index) => (
               <motion.div
@@ -1593,20 +1593,20 @@ npm run extension:install`}
                 onClick={() => openLightbox(screenshot)}
                 whileHover="hover"
               >
-                <motion.div 
+                <motion.div
                   className="overflow-hidden rounded-xl"
                   whileHover={{ scale: 1.03 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <Image 
-                    src={screenshot.image} 
-                    alt={screenshot.title} 
-                    width={600} 
-                    height={400} 
+                  <Image
+                    src={screenshot.image}
+                    alt={screenshot.title}
+                    width={600}
+                    height={400}
                     className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </motion.div>
-                <motion.div 
+                <motion.div
                   className={cn(
                     "absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 rounded-xl"
                   )}
@@ -1619,7 +1619,7 @@ npm run extension:install`}
               </motion.div>
             ))}
           </div>
-          
+
           {/* Lightbox */}
           <AnimatePresence>
             {lightboxOpen && currentScreenshot && (
@@ -1636,18 +1636,18 @@ npm run extension:install`}
                 >
                   &times;
                 </motion.button>
-                <motion.div 
+                <motion.div
                   className="max-w-5xl"
                   initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0.9, opacity: 0 }}
                   transition={{ type: "spring", damping: 20 }}
                 >
-                  <Image 
-                    src={currentScreenshot.image} 
-                    alt={currentScreenshot.title} 
-                    width={1200} 
-                    height={800} 
+                  <Image
+                    src={currentScreenshot.image}
+                    alt={currentScreenshot.title}
+                    width={1200}
+                    height={800}
                     className="w-full h-auto rounded-xl border border-slate-700 shadow-2xl"
                   />
                   <div className="text-center mt-6">
@@ -1667,7 +1667,7 @@ npm run extension:install`}
         theme === "dark" ? "bg-gradient-to-b from-slate-900 to-slate-950" : "bg-gradient-to-b from-slate-50 to-white"
       )} id="analytics-demo">
         <div className="max-w-7xl mx-auto relative z-10">
-          <motion.div 
+          <motion.div
             className="text-center mb-16"
             initial="hidden"
             whileInView="show"
@@ -1679,7 +1679,7 @@ npm run extension:install`}
                 Data-Driven
               </span>
             </motion.div>
-            <motion.h2 
+            <motion.h2
               variants={fadeIn}
               className="text-4xl md:text-5xl font-bold mb-4"
             >
@@ -1697,7 +1697,7 @@ npm run extension:install`}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.1 }}
               >
-                {">"} Track application metrics: 
+                {">"} Track application metrics:
               </motion.span>
               <motion.span
                 initial={{ width: 0, opacity: 0 }}
@@ -1717,8 +1717,8 @@ npm run extension:install`}
               </motion.span>
             </motion.div>
           </motion.div>
-          
-          <motion.div 
+
+          <motion.div
             className={cn(
               "max-w-4xl mx-auto p-8 rounded-xl border shadow-lg backdrop-blur-md",
               theme === "dark" ? "bg-slate-900/80 border-slate-800" : "bg-white/80 border-slate-200"
@@ -1732,7 +1732,7 @@ npm run extension:install`}
             <canvas ref={chartRef} className="w-full h-[300px]"></canvas>
           </motion.div>
         </div>
-        
+
         {/* Background decorations */}
         <div className="absolute -z-10 inset-0 overflow-hidden opacity-20 pointer-events-none">
           <svg className="absolute top-0 right-0 w-1/2 h-full opacity-30" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -1747,7 +1747,7 @@ npm run extension:install`}
       {/* Community Contributions Section */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 relative" id="community-contributions">
         <div className="max-w-7xl mx-auto">
-          <motion.div 
+          <motion.div
             className="text-center mb-16"
             initial="hidden"
             whileInView="show"
@@ -1759,7 +1759,7 @@ npm run extension:install`}
                 Open Source
               </span>
             </motion.div>
-            <motion.h2 
+            <motion.h2
               variants={fadeIn}
               className="text-4xl md:text-5xl font-bold mb-4"
             >
@@ -1768,14 +1768,14 @@ npm run extension:install`}
                 Contributions
               </span>
             </motion.h2>
-            <motion.p 
+            <motion.p
               variants={fadeIn}
               className={`text-lg max-w-2xl mx-auto ${theme === "dark" ? "text-slate-400" : "text-slate-600"}`}
             >
               Join our open-source community and help shape the future of jjugg.
             </motion.p>
           </motion.div>
-          
+
           <div className="grid md:grid-cols-3 gap-8 mb-16">
             {CONTRIBUTIONS.map((contribution, index) => (
               <motion.div
@@ -1783,8 +1783,8 @@ npm run extension:install`}
                 className={cn(
                   "group p-8 rounded-xl border backdrop-blur-md relative overflow-hidden",
                   "before:absolute before:inset-0 before:bg-gradient-to-b before:opacity-0 before:transition-all before:duration-300 before:hover:opacity-100 before:-z-10",
-                  theme === "dark" 
-                    ? "bg-slate-900/40 border-slate-800 hover:border-indigo-500/40 before:from-indigo-500/5 before:to-purple-500/5" 
+                  theme === "dark"
+                    ? "bg-slate-900/40 border-slate-800 hover:border-indigo-500/40 before:from-indigo-500/5 before:to-purple-500/5"
                     : "bg-white/40 border-slate-200 hover:border-indigo-500/40 before:from-indigo-500/5 before:to-purple-500/5"
                 )}
                 initial={{ opacity: 0, y: 30 }}
@@ -1811,8 +1811,8 @@ npm run extension:install`}
               </motion.div>
             ))}
           </div>
-          
-          <motion.div 
+
+          <motion.div
             className="text-center"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -1822,7 +1822,7 @@ npm run extension:install`}
             <h3 className="text-2xl font-semibold mb-8">Meet Our Top Contributors</h3>
             <div className="flex flex-wrap justify-center gap-10 mb-12">
               {[1, 2, 3].map((i) => (
-                <motion.div 
+                <motion.div
                   key={i}
                   className="text-center"
                   whileHover={{ y: -5 }}
@@ -1831,12 +1831,12 @@ npm run extension:install`}
                     <div className="absolute inset-0 rounded-full bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 animate-spin-slow blur-sm opacity-70"></div>
                     <div className="absolute inset-0.5 rounded-full bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 p-1">
                       <div className={`rounded-full overflow-hidden w-full h-full ${theme === "dark" ? "bg-slate-900" : "bg-white"}`}>
-                        <Image 
-                          src={`/avatar${i}.jpg`} 
-                          alt={`Contributor ${i}`} 
-                          width={80} 
+                        <Image
+                          src={`/avatar${i}.jpg`}
+                          alt={`Contributor ${i}`}
+                          width={80}
                           height={80}
-                          className="w-full h-full object-cover" 
+                          className="w-full h-full object-cover"
                         />
                       </div>
                     </div>
@@ -1866,11 +1866,11 @@ npm run extension:install`}
       {/* CTA Section */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden" id="cta">
         <div className="max-w-7xl mx-auto">
-          <motion.div 
+          <motion.div
             className={cn(
               "max-w-3xl mx-auto p-12 rounded-2xl border backdrop-blur-md relative overflow-hidden shadow-xl",
-              theme === "dark" 
-                ? "bg-gradient-to-br from-slate-900/80 via-slate-900/60 to-slate-800/80 border-slate-800" 
+              theme === "dark"
+                ? "bg-gradient-to-br from-slate-900/80 via-slate-900/60 to-slate-800/80 border-slate-800"
                 : "bg-gradient-to-br from-white/80 via-white/60 to-slate-50/80 border-slate-200"
             )}
             initial={{ opacity: 0, y: 30 }}
@@ -1881,7 +1881,7 @@ npm run extension:install`}
             {/* Decorative elements */}
             <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-indigo-500/20 rounded-full blur-3xl"></div>
             <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl"></div>
-            
+
             <motion.div
               initial="hidden"
               whileInView="show"
@@ -1889,44 +1889,44 @@ npm run extension:install`}
               variants={staggerContainer}
               className="relative z-10"
             >
-              <motion.h2 
+              <motion.h2
                 variants={fadeIn}
                 className="text-4xl md:text-5xl font-bold mb-4 text-center"
               >
                 Ready to{" "}
-                <motion.span 
+                <motion.span
                   className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 inline-block"
-                  animate={{ 
+                  animate={{
                     scale: [1, 1.1, 1],
                     rotate: [-1, 1, -1]
                   }}
-                  transition={{ 
+                  transition={{
                     duration: 2,
                     repeat: Infinity,
-                    repeatType: "reverse" 
+                    repeatType: "reverse"
                   }}
                 >
                   Automate
                 </motion.span>
                 {" "}Your Job Search?
               </motion.h2>
-              <motion.p 
+              <motion.p
                 variants={fadeIn}
                 className={`text-lg mb-8 max-w-xl mx-auto text-center ${theme === "dark" ? "text-slate-400" : "text-slate-600"}`}
               >
                 Join the open-source movement revolutionizing job applications. No more manual tracking—our userscripts capture data as you apply, email parsers monitor status changes, and AI prepares you for interviews.
               </motion.p>
               <motion.div variants={fadeIn} className="max-w-md mx-auto">
-                <motion.div 
+                <motion.div
                   className="flex flex-col sm:flex-row gap-4"
                   whileHover={{ scale: 1.02 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
                 >
-                  <Input 
-                    type="email" 
-                    placeholder="Your Email" 
-                    className={`h-12 px-5 rounded-full shadow-inner font-mono ${theme === "dark" ? "bg-slate-800 border-slate-700 focus:border-indigo-500/50 focus:ring-indigo-500/30" : "bg-white border-slate-300 focus:border-indigo-500/50 focus:ring-indigo-500/30"}`} 
-                    required 
+                  <Input
+                    type="email"
+                    placeholder="Your Email"
+                    className={`h-12 px-5 rounded-full shadow-inner font-mono ${theme === "dark" ? "bg-slate-800 border-slate-700 focus:border-indigo-500/50 focus:ring-indigo-500/30" : "bg-white border-slate-300 focus:border-indigo-500/50 focus:ring-indigo-500/30"}`}
+                    required
                   />
                   <Button size="lg" className="font-mono rounded-full bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500 hover:opacity-90 transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-0.5 px-6 whitespace-nowrap">
                     Get Started Free
@@ -1967,13 +1967,13 @@ npm run extension:install`}
                   { icon: <Instagram size={18} />, href: "#" },
                   { icon: <Github size={18} />, href: "#" }
                 ].map((social, i) => (
-                  <motion.a 
+                  <motion.a
                     key={i}
-                    href={social.href} 
+                    href={social.href}
                     className={cn(
                       "w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300",
-                      theme === "dark" 
-                        ? "bg-slate-800 border border-slate-700 text-slate-400 hover:bg-indigo-500 hover:text-white hover:border-indigo-500" 
+                      theme === "dark"
+                        ? "bg-slate-800 border border-slate-700 text-slate-400 hover:bg-indigo-500 hover:text-white hover:border-indigo-500"
                         : "bg-slate-100 border border-slate-200 text-slate-600 hover:bg-indigo-500 hover:text-white hover:border-indigo-500"
                     )}
                     whileHover={{ y: -3, scale: 1.1 }}
@@ -1984,7 +1984,7 @@ npm run extension:install`}
                 ))}
               </div>
             </div>
-            
+
             {[
               {
                 title: "Product",
@@ -2018,8 +2018,8 @@ npm run extension:install`}
                 <ul className="space-y-2">
                   {column.links.map((link, j) => (
                     <li key={j}>
-                      <motion.a 
-                        href={link.href} 
+                      <motion.a
+                        href={link.href}
                         className={`inline-block ${theme === "dark" ? "text-slate-400 hover:text-indigo-400" : "text-slate-600 hover:text-indigo-600"} hover:underline`}
                         whileHover={{ x: 3 }}
                         transition={{ type: "spring", stiffness: 400, damping: 10 }}
@@ -2032,7 +2032,7 @@ npm run extension:install`}
               </div>
             ))}
           </div>
-          
+
           <div className={`pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4
             ${theme === "dark" ? "border-slate-800/50" : "border-slate-200/50"}`}
           >
@@ -2040,14 +2040,14 @@ npm run extension:install`}
               © 2023 jjugg. All rights reserved.
             </p>
             <div className="flex space-x-8">
-              <a 
-                href="#" 
+              <a
+                href="#"
                 className={`text-sm ${theme === "dark" ? "text-slate-500 hover:text-indigo-400" : "text-slate-600 hover:text-indigo-600"} hover:underline`}
               >
                 Privacy Policy
               </a>
-              <a 
-                href="#" 
+              <a
+                href="#"
                 className={`text-sm ${theme === "dark" ? "text-slate-500 hover:text-indigo-400" : "text-slate-600 hover:text-indigo-600"} hover:underline`}
               >
                 Terms of Service
