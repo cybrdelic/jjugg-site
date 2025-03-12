@@ -7,7 +7,7 @@ import {
   Check, Globe, FileText, Layout, ArrowRight, Zap, BarChart3,
   Code, Mail, Shield, Terminal, Database, Server,
   Sparkles, UserCircle2, Laptop, MonitorSmartphone, Package, Workflow as WorkflowIcon,
-  Cpu, Bot, Brain, Key, LockIcon, Star
+  Cpu, Bot, Brain, Key, LockIcon
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
@@ -606,8 +606,6 @@ export default function Home() {
         </AnimatePresence>
       </nav>
 
-      // Replace the entire Hero Section with this code
-
       {/* Hero Section */}
       <section
         ref={heroRef}
@@ -876,73 +874,6 @@ export default function Home() {
           />
         </div>
 
-        {/* Light/dark mode floating elements */}
-        <div className="absolute inset-0 pointer-events-none z-0">
-          {theme === "dark" ? (
-            <>
-              <motion.div
-                className="absolute w-6 h-6 opacity-30"
-                style={{ top: '25%', right: '15%' }}
-                animate={{
-                  y: [0, -15, 0],
-                  opacity: [0.2, 0.3, 0.2]
-                }}
-                transition={{
-                  duration: 7,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              >
-                <Star className="text-yellow-500" />
-              </motion.div>
-              <motion.div
-                className="absolute w-4 h-4 opacity-20"
-                style={{ bottom: '35%', left: '20%' }}
-                animate={{
-                  y: [0, -10, 0],
-                  opacity: [0.1, 0.2, 0.1]
-                }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: 1
-                }}
-              >
-                <Star className="text-yellow-500" />
-              </motion.div>
-            </>
-          ) : (
-            <>
-              <motion.div
-                className="absolute w-20 h-20 bg-blue-500/5 rounded-full blur-md"
-                style={{ top: '30%', right: '25%' }}
-                animate={{
-                  scale: [1, 1.2, 1]
-                }}
-                transition={{
-                  duration: 6,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              />
-              <motion.div
-                className="absolute w-16 h-16 bg-purple-500/5 rounded-full blur-md"
-                style={{ bottom: '25%', left: '15%' }}
-                animate={{
-                  scale: [1, 1.3, 1]
-                }}
-                transition={{
-                  duration: 7,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: 1
-                }}
-              />
-            </>
-          )}
-        </div>
-
         {/* Scroll indicator */}
         <motion.div
           className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center"
@@ -1027,50 +958,7 @@ export default function Home() {
                 />
               </div>
 
-              {/* Code example */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                className="mt-8"
-              >
-                <CodeBlock language="javascript" showLineNumbers={true} className="shadow-lg">
-                  {`// Example of userscript code for LinkedIn job application
-// @name     jjugg - LinkedIn Application Tracker
-// @version  1.0
-// @match    *://*.linkedin.com/jobs/*
 
-(function() {
-  // Detect when a job application is submitted
-  document.addEventListener('click', async (e) => {
-    if (e.target.textContent.includes('Submit application')) {
-
-      // Extract job details
-      const jobData = {
-        title: document.querySelector('.job-title').textContent,
-        company: document.querySelector('.company-name').textContent,
-        location: document.querySelector('.job-location').textContent,
-        date: new Date().toISOString(),
-        source: 'linkedin',
-        status: 'applied'
-      };
-
-      // Store in localStorage until sync
-      localStorage.setItem(
-        'jjugg_applications',
-        JSON.stringify([
-          ...JSON.parse(localStorage.getItem('jjugg_applications') || '[]'),
-          jobData
-        ])
-      );
-
-      console.log('jjugg captured application:', jobData);
-    }
-  });
-})();`}
-                </CodeBlock>
-              </motion.div>
             </div>
           </div>
 
