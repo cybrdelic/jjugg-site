@@ -7,7 +7,7 @@ import {
   Check, Globe, FileText, Layout, ArrowRight, Zap, BarChart3,
   Code, Mail, Shield, Terminal, Database, Server,
   Sparkles, UserCircle2, Laptop, MonitorSmartphone, Package, Workflow as WorkflowIcon,
-  Cpu, Bot, Brain, Key, LockIcon
+  Cpu, Bot, Brain, Key, LockIcon, Star
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 import { CodeBlock } from '@/app/components/ui/code-block';
 import { FeatureCard } from '@/app/components/ui/feature-card';
 import { SectionHeader } from '@/app/components/ui/section-header';
+import { HeroAnimation } from "@/app/components/ui/hero-animation"
 import { Separator } from '@/app/components/ui/separator';
 import { Badge } from '@/app/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/app/components/ui/tabs';
@@ -605,6 +606,8 @@ export default function Home() {
         </AnimatePresence>
       </nav>
 
+      // Replace the entire Hero Section with this code
+
       {/* Hero Section */}
       <section
         ref={heroRef}
@@ -790,124 +793,13 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.5 }}
             className="relative"
           >
-            {/* App Preview */}
-            <div className="relative z-10 overflow-hidden rounded-2xl shadow-2xl border border-slate-800/50 bg-gradient-to-br from-slate-900/90 to-black/90 backdrop-blur-lg">
-              <motion.div
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.8, duration: 0.5 }}
-                className="p-2"
-              >
-                <div className="flex items-center justify-start p-2 border-b border-slate-800/60">
-                  <div className="flex space-x-2">
-                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                  </div>
-                  <div className="text-xs text-slate-400 mx-auto">jjugg Application Manager</div>
-                </div>
-                <div className="relative h-[300px] md:h-[400px]">
-                  <Image
-                    src="/dashboard.jpg"
-                    alt="jjugg Dashboard"
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-
-                  {/* Animated data flow */}
-                  <div className="absolute inset-0 z-10 overflow-hidden pointer-events-none">
-                    {/* Browser extension icon */}
-                    <motion.div
-                      className="absolute top-6 left-6 bg-white/10 backdrop-blur-md rounded-md p-2 border border-indigo-500/30 shadow-lg"
-                      animate={{
-                        scale: [1, 1.05, 1],
-                        borderColor: [
-                          'rgba(99, 102, 241, 0.3)',
-                          'rgba(99, 102, 241, 0.6)',
-                          'rgba(99, 102, 241, 0.3)'
-                        ]
-                      }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        repeatType: "reverse"
-                      }}
-                    >
-                      <Code className="h-5 w-5 text-indigo-500" />
-                    </motion.div>
-
-                    {/* Data packet animations */}
-                    {[...Array(5)].map((_, i) => (
-                      <motion.div
-                        key={`packet-${i}`}
-                        className="absolute h-2 w-2 rounded-full bg-indigo-500"
-                        initial={{ x: 40, y: 40, opacity: 0, scale: 0 }}
-                        animate={{
-                          x: [40, 100, 160, 220],
-                          y: [40, 90, 140, 200],
-                          opacity: [0, 1, 1, 0],
-                          scale: [0, 1, 1, 0]
-                        }}
-                        transition={{
-                          duration: 4,
-                          delay: i * 0.8,
-                          repeat: Infinity,
-                          repeatDelay: 1
-                        }}
-                      />
-                    ))}
-
-                    {/* Email integration icon */}
-                    <motion.div
-                      className="absolute top-6 right-6 bg-white/10 backdrop-blur-md rounded-md p-2 border border-blue-500/30 shadow-lg"
-                      animate={{
-                        scale: [1, 1.05, 1],
-                        borderColor: [
-                          'rgba(59, 130, 246, 0.3)',
-                          'rgba(59, 130, 246, 0.6)',
-                          'rgba(59, 130, 246, 0.3)'
-                        ]
-                      }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        repeatType: "reverse",
-                        delay: 1
-                      }}
-                    >
-                      <Mail className="h-5 w-5 text-blue-500" />
-                    </motion.div>
-
-                    {/* Data packet animations from email */}
-                    {[...Array(5)].map((_, i) => (
-                      <motion.div
-                        key={`mail-${i}`}
-                        className="absolute h-2 w-2 rounded-full bg-blue-500"
-                        initial={{ x: 300, y: 40, opacity: 0, scale: 0 }}
-                        animate={{
-                          x: [300, 240, 180, 120],
-                          y: [40, 70, 100, 150],
-                          opacity: [0, 1, 1, 0],
-                          scale: [0, 1, 1, 0]
-                        }}
-                        transition={{
-                          duration: 4,
-                          delay: i * 0.8 + 2,
-                          repeat: Infinity,
-                          repeatDelay: 1
-                        }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            </div>
+            {/* App Preview Animation */}
+            <HeroAnimation />
 
             {/* Decorative elements */}
             <div className="absolute -z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full">
               <motion.div
-                className="absolute top-0 -left-4 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl"
+                className={`absolute top-0 -left-4 w-72 h-72 ${theme === "dark" ? "bg-indigo-500/10" : "bg-indigo-500/5"} rounded-full blur-3xl`}
                 animate={{
                   scale: [1, 1.1, 1],
                   opacity: [0.3, 0.5, 0.3],
@@ -921,7 +813,7 @@ export default function Home() {
                 }}
               />
               <motion.div
-                className="absolute bottom-0 -right-4 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl"
+                className={`absolute bottom-0 -right-4 w-72 h-72 ${theme === "dark" ? "bg-purple-500/10" : "bg-purple-500/5"} rounded-full blur-3xl`}
                 animate={{
                   scale: [1, 1.2, 1],
                   opacity: [0.3, 0.6, 0.3],
@@ -982,6 +874,73 @@ export default function Home() {
               delay: 1
             }}
           />
+        </div>
+
+        {/* Light/dark mode floating elements */}
+        <div className="absolute inset-0 pointer-events-none z-0">
+          {theme === "dark" ? (
+            <>
+              <motion.div
+                className="absolute w-6 h-6 opacity-30"
+                style={{ top: '25%', right: '15%' }}
+                animate={{
+                  y: [0, -15, 0],
+                  opacity: [0.2, 0.3, 0.2]
+                }}
+                transition={{
+                  duration: 7,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              >
+                <Star className="text-yellow-500" />
+              </motion.div>
+              <motion.div
+                className="absolute w-4 h-4 opacity-20"
+                style={{ bottom: '35%', left: '20%' }}
+                animate={{
+                  y: [0, -10, 0],
+                  opacity: [0.1, 0.2, 0.1]
+                }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: 1
+                }}
+              >
+                <Star className="text-yellow-500" />
+              </motion.div>
+            </>
+          ) : (
+            <>
+              <motion.div
+                className="absolute w-20 h-20 bg-blue-500/5 rounded-full blur-md"
+                style={{ top: '30%', right: '25%' }}
+                animate={{
+                  scale: [1, 1.2, 1]
+                }}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
+              <motion.div
+                className="absolute w-16 h-16 bg-purple-500/5 rounded-full blur-md"
+                style={{ bottom: '25%', left: '15%' }}
+                animate={{
+                  scale: [1, 1.3, 1]
+                }}
+                transition={{
+                  duration: 7,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: 1
+                }}
+              />
+            </>
+          )}
         </div>
 
         {/* Scroll indicator */}
