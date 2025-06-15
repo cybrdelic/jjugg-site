@@ -1,107 +1,440 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+/* Tailwind directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Root variables - these work with Tailwind */
 :root {
-  --font-sans: var(--font-inter);
-  --font-mono: var(--font-space-mono);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+  --accent-primary: #3b82f6;
+  --accent-secondary: #6366f1;
+  --accent-success: #10b981;
+  --accent-warning: #f59e0b;
+  --accent-danger: #ef4444;
+  --blur-amount: 20px;
+  --transition-fast: 150ms;
+  --transition-normal: 300ms;
+  --transition-slow: 500ms;
+  --easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Light theme variables */
+.light {
+  --glass-bg: rgba(255, 255, 255, 0.25);
+  --glass-sidebar-bg: rgba(255, 255, 255, 0.75);
+  --glass-card-bg: rgba(255, 255, 255, 0.55);
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+  --text-tertiary: #6b7280;
+  --text-accent: #3b82f6;
+  --border-thin: rgba(0, 0, 0, 0.1);
+  --border-divider: rgba(0, 0, 0, 0.08);
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.04);
+  --bg: linear-gradient(135deg, #f9fafb, #f3f4f6);
+  --hover-bg: rgba(0, 0, 0, 0.03);
+  --active-bg: rgba(59, 130, 246, 0.08);
+  --ring-color: rgba(59, 130, 246, 0.3);
+}
+
+/* Dark theme variables */
+.dark {
+  --glass-bg: rgba(17, 24, 39, 0.25);
+  --glass-sidebar-bg: rgba(15, 23, 42, 0.75);
+  --glass-card-bg: rgba(17, 24, 39, 0.55);
+  --text-primary: #f9fafb;
+  --text-secondary: #e5e7eb;
+  --text-tertiary: #d1d5db;
+  --text-accent: #60a5fa;
+  --border-thin: rgba(255, 255, 255, 0.1);
+  --border-divider: rgba(255, 255, 255, 0.06);
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.25), 0 5px 10px rgba(0, 0, 0, 0.15);
+  --bg: linear-gradient(135deg, #0f172a, #1e293b);
+  --hover-bg: rgba(255, 255, 255, 0.05);
+  --active-bg: rgba(96, 165, 250, 0.12);
+  --ring-color: rgba(96, 165, 250, 0.4);
 }
 
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
- 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
- 
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
- 
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
- 
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
- 
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
- 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
- 
-    --radius: 0;
+  html {
+    @apply antialiased;
+    -webkit-tap-highlight-color: transparent;
   }
- 
-  .dark {
-    --background: 0 0% 0%;
-    --foreground: 0 0% 98%;
- 
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
- 
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
- 
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
- 
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
- 
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
- 
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
- 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
- 
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-  }
-}
 
-@layer base {
-  * {
-    @apply border-border;
-  }
   body {
-    @apply bg-background text-foreground;
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: 'Inter', system-ui, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    transition: background 0.3s var(--easing-standard), color 0.3s var(--easing-standard);
+    overflow-x: hidden;
+  }
+
+  /* Apply smooth transitions to interactive elements */
+  a,
+  button,
+  input,
+  select,
+  textarea {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform;
+    transition-timing-function: var(--easing-standard);
+    transition-duration: var(--transition-normal);
+  }
+
+  /* Focus styles */
+  *:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--ring-color);
+    @apply rounded-md;
   }
 }
 
-html {
-  scroll-behavior: smooth;
+@layer components {
+
+  /* App container */
+  .app-container {
+    @apply flex h-screen overflow-hidden;
+    background: var(--bg);
+  }
+
+  /* Main content area */
+  .glass-main {
+    @apply flex-grow p-6 overflow-y-auto;
+    margin-left: 280px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--blur-amount));
+    -webkit-backdrop-filter: blur(var(--blur-amount));
+    box-shadow: var(--shadow);
+    border-left: 1px solid var(--border-thin);
+    transition: margin-left 0.3s var(--easing-standard);
+    height: 100vh;
+  }
+
+  /* Sidebar */
+  .glass-sidebar {
+    background: var(--glass-sidebar-bg);
+    backdrop-filter: blur(calc(var(--blur-amount) * 1.2));
+    -webkit-backdrop-filter: blur(calc(var(--blur-amount) * 1.2));
+    border-right: 1px solid var(--border-thin);
+    box-shadow: var(--shadow);
+    z-index: 50;
+    user-select: none;
+  }
+
+  /* Glass Card Component */
+  .glass-card {
+    @apply rounded-xl p-5;
+    background: var(--glass-card-bg);
+    backdrop-filter: blur(var(--blur-amount));
+    -webkit-backdrop-filter: blur(var(--blur-amount));
+    border: 1px solid var(--border-thin);
+    box-shadow: var(--shadow);
+    transition: transform 0.2s var(--easing-standard), box-shadow 0.2s var(--easing-standard);
+  }
+
+  .glass-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* Button Styles */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition-all;
+    background-color: var(--glass-card-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border-thin);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur-amount));
+    -webkit-backdrop-filter: blur(var(--blur-amount));
+  }
+
+  .btn:hover {
+    @apply transform -translate-y-0.5;
+    background-color: var(--hover-bg);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .btn:active {
+    @apply transform translate-y-0;
+    background-color: var(--active-bg);
+  }
+
+  .btn-primary {
+    @apply bg-blue-500 text-white border-blue-600;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .btn-primary:hover {
+    @apply bg-blue-600 border-blue-700;
+  }
+
+  /* Text color utility classes */
+  .text-primary {
+    color: var(--text-primary);
+  }
+
+  .text-secondary {
+    color: var(--text-secondary);
+  }
+
+  .text-tertiary {
+    color: var(--text-tertiary);
+  }
+
+  .text-accent {
+    color: var(--text-accent);
+  }
+
+  /* Background utility classes */
+  .bg-hover {
+    background-color: var(--hover-bg);
+  }
+
+  .bg-active {
+    background-color: var(--active-bg);
+  }
+
+  /* Border utility class */
+  .border-divider {
+    border-color: var(--border-divider);
+  }
+
+  /* Input styles */
+  .input {
+    @apply w-full px-3 py-2 rounded-lg text-primary bg-hover border border-divider;
+    transition: all 0.2s var(--easing-standard);
+  }
+
+  .input:focus {
+    @apply outline-none;
+    box-shadow: 0 0 0 3px var(--ring-color);
+    border-color: var(--text-accent);
+  }
 }
 
-.font-mono {
-  font-family: var(--font-mono);
+@layer utilities {
+
+  /* Custom scrollbar */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-divider) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: var(--border-divider);
+    border-radius: 20px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background-color: var(--text-tertiary);
+  }
+
+  /* Hide scrollbar */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Subtle animations */
+  .hover-lift {
+    transition: transform 0.2s var(--easing-standard);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-2px);
+  }
+
+  /* WebGL Hero Visualization */
+  .hero-visualization {
+    min-height: 500px;
+    height: 70vh;
+  }
+
+  .hero-visualization canvas {
+    touch-action: none;
+  }
+
+  .hero-content-overlay {
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .hero-content-overlay .button-container {
+    pointer-events: auto;
+  }
+
+  /* Three.js Hero Visualization Styles */
+  .threejs-hero {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 1rem;
+  }
+
+  .threejs-hero canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    outline: none;
+  }
+
+  .threejs-hero-content {
+    position: relative;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .threejs-hero-content .interactive {
+    pointer-events: auto;
+  }
+
+  .threejs-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to right, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.3));
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .dark .threejs-hero-overlay {
+    background: linear-gradient(to right, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.4));
+  }
+
+  .light .threejs-hero-overlay {
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.3));
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .glass-main {
+      margin-left: 0;
+      padding: 16px;
+    }
+
+    .hero-visualization,
+    .threejs-hero {
+      min-height: 400px;
+      height: 60vh;
+    }
+  }
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
+/* Animations */
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
 }
 
-::-webkit-scrollbar-track {
-  @apply bg-secondary;
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-::-webkit-scrollbar-thumb {
-  @apply bg-primary;
+/* Add additional animation for glowing effects */
+@keyframes glow {
+
+  0%,
+  100% {
+    filter: brightness(1) blur(0px);
+  }
+
+  50% {
+    filter: brightness(1.3) blur(3px);
+  }
+}
+
+.animate-glow {
+  animation: glow 4s ease-in-out infinite;
+}
+
+/* Three.js Hero Visualization Styles */
+.threejs-hero {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 1rem;
+}
+
+.threejs-hero canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  outline: none;
+}
+
+.threejs-hero-content {
+  position: relative;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.threejs-hero-content .interactive {
+  pointer-events: auto;
+}
+
+.threejs-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to right, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.3));
+  pointer-events: none;
+  z-index: 5;
+}
+
+.dark .threejs-hero-overlay {
+  background: linear-gradient(to right, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.4));
+}
+
+.light .threejs-hero-overlay {
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.3));
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .glass-main {
+    margin-left: 0;
+    padding: 16px;
+  }
+
+  .hero-visualization,
+  .threejs-hero {
+    min-height: 400px;
+    height: 60vh;
+  }
 }
